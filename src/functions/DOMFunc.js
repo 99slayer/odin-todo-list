@@ -1,12 +1,8 @@
 const sidebar = document.getElementById('sidebar');
 const main = document.getElementById('main');
 
-//function that generates task header
-
-//function that generates task card
-//makes empty card if subscription comes up with nothing?
-const generateTaskCard = function(){
-    const editText = function(event){
+const editFunc = (()=>{
+    const editText =(event)=>{    
         const textElement = event.target;
         const input = document.createElement('input');
         textElement.style.display = 'none';
@@ -27,32 +23,40 @@ const generateTaskCard = function(){
         input.onblur = () =>{
             finishEdit();
         };
-
         const finishEdit = function(){
             textElement.innerHTML = input.value;
             input.parentNode.removeChild(input);
             textElement.style.display = '';
-        }
-    }
+        };
+    };
+    return {editText};
+})();
+
+//makes empty card if subscription comes up with nothing?
+const generateTaskCard = function(){
     const card = document.createElement('div');
     const cardHeader = document.createElement('div');
     const cardMain = document.createElement('div');
 
     const title = document.createElement('h2');
     title.textContent = 'placeholder title';
-    title.addEventListener('click',editText);
+    title.addEventListener('click',editFunc.editText);
 
+    //priority will have 4 levels: critical, important, normal, and finished.
     const priority = document.createElement('p');
     priority.textContent = 'priority';
-    priority.addEventListener('click',editText);
+    priority.addEventListener('click',editFunc.editText);
 
+    //we're gonna try something with an outside library here later.
     const dueDate = document.createElement('p');
     dueDate.textContent = 'dueDate';
-    dueDate.addEventListener('click',editText);
+    dueDate.addEventListener('click',editFunc.editText);
 
+    //setting contenteditable attribute to true seems to yeild better results for description?
     const description = document.createElement('p');
+    description.setAttribute('contenteditable','true')
     description.textContent = 'description Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat officiis modi fugit distinctio dignissimos molestias animi cum! Perspiciatis sint unde nisi accusamus eaque facere, porro, sequi, sit illo quas eveniet.'
-    description.addEventListener('click',editText);
+    // description.addEventListener('click',editText);
 
     // seperate all creation into one module then return an object with all created elements and run in through the class adding function?
     const elementObj = {
@@ -64,6 +68,7 @@ const generateTaskCard = function(){
         dueDate,
         description,
     };
+
     const elementNameArray = Object.keys(elementObj);
 
     for(let i=elementNameArray.length-1;i>=0;--i){

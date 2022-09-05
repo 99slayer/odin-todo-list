@@ -1,23 +1,18 @@
-const title = document.getElementById('title');
-const description = document.getElementById('description');
-const dueDate = document.getElementById('dueDate');
-const priority = document.getElementById('priority');
-
-const grabForm = function(){
-    const formGrab = {
-        title:title.value,
-        description:description.value,
-        dueDate:dueDate.value,
-        priority:priority.value,
-    }
-    console.log(formGrab);
-    pubsub.publish('formGrab',formGrab);
-    //clears old input
-    const domArray = [title,description,dueDate,priority];
-    domArray.forEach((e)=>{
-        e.value = '';
-    });
-};
+// const grabForm = function(){
+//     const formGrab = {
+//         title:title.value,
+//         description:description.value,
+//         dueDate:dueDate.value,
+//         priority:priority.value,
+//     }
+//     console.log(formGrab);
+//     pubsub.publish('formGrab',formGrab);
+//     //clears old input
+//     const domArray = [title,description,dueDate,priority];
+//     domArray.forEach((e)=>{
+//         e.value = '';
+//     });
+// };
 
 const pubsub = {
     events:{},
@@ -48,28 +43,28 @@ const pubsub = {
     // },
 };
 
-const taskFactory = (x) =>{
-    //x is formData
-    const title = x.title;
-    const description = x.description;
-    const dueDate = x.dueDate;
-    const priority = x.priority;
-    const logPriority=()=>{
-        console.log(priority);
-    };
-    // functions for editing each property? inheritance issue*
-    pubsub.publish('taskCreated',{title,description,dueDate,priority,logPriority})
-    return{title,description,dueDate,priority,logPriority}
-}
-pubsub.subscribe('formGrab',taskFactory)
+// const taskFactory = (x) =>{
+//     //x is formData
+//     const title = x.title;
+//     const description = x.description;
+//     const dueDate = x.dueDate;
+//     const priority = x.priority;
+//     const logPriority=()=>{
+//         console.log(priority);
+//     };
+//     // functions for editing each property? inheritance issue*
+//     pubsub.publish('taskCreated',{title,description,dueDate,priority,logPriority})
+//     return{title,description,dueDate,priority,logPriority}
+// }
+// pubsub.subscribe('formGrab',taskFactory)
 
-const taskStorage = [];
-const storeTask = function(x){
-    console.log(x);
-    taskStorage.push(x);
-    console.log(taskStorage);
-};
-pubsub.subscribe('taskCreated',storeTask);
+// const taskStorage = [];
+// const storeTask = function(x){
+//     console.log(x);
+//     taskStorage.push(x);
+//     console.log(taskStorage);
+// };
+// pubsub.subscribe('taskCreated',storeTask);
 
 // const test = function(){
 //     taskList.forEach((e)=>{
