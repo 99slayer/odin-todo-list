@@ -1,3 +1,3 @@
 "use strict"
-import { generateTaskCard } from "./functions/DOMFunc";
-generateTaskCard();
+import { taskCreation } from "./functions/DOMFunc"
+// generateTaskCard();

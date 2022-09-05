@@ -15,9 +15,23 @@ body{
     gap: 10px;
 }
 #sidebar{
+    padding: 10px;
     background-color: gray;
     border-radius: 10px;
 }
+#sidebarHeader{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+#sidebarHeader .newTaskButton{
+    font-size: 2em;
+    color: red;
+}
+#sidebarHeader .newTaskButton:hover{
+    cursor: pointer;
+}
+
 #main{
     background-color: gray;
     grid-column: 2/4;
@@ -36,11 +50,12 @@ body{
     background-color: white;
     border-radius: 10px;
 }
-.title:hover{
-    cursor:pointer;
-}
-.title:active{
+/* .title:active{
     color: red;
+} */
+.editable:hover{
+    cursor:pointer;
+    background-color: rgb(189, 189, 189);
 }
 .cardMain{
     flex: 4;
