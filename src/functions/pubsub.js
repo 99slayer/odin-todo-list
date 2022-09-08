@@ -42,7 +42,7 @@ const pubsub = {
 
     // },
 };
-
+export {pubsub};
 // const taskFactory = (x) =>{
 //     //x is formData
 //     const title = x.title;

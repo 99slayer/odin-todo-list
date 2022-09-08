@@ -15,6 +15,9 @@ body{
     gap: 10px;
 }
 #sidebar{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     padding: 10px;
     background-color: gray;
     border-radius: 10px;
@@ -26,12 +29,18 @@ body{
 }
 #sidebarHeader .newTaskButton{
     font-size: 2em;
-    color: red;
 }
 #sidebarHeader .newTaskButton:hover{
+    color: rgb(41, 172, 41);
     cursor: pointer;
 }
-
+/* #taskTabs{
+} */
+#taskTabs .tab{
+    height: 20px;
+    background-color: white;
+    border: 1px solid black;
+}
 #main{
     background-color: gray;
     grid-column: 2/4;
@@ -46,6 +55,7 @@ body{
     gap: 10px;
 }
 .cardHeader{
+    padding: 10px;
     flex:1;
     background-color: white;
     border-radius: 10px;
@@ -53,11 +63,15 @@ body{
 /* .title:active{
     color: red;
 } */
+/* .editable{
+    background-color:gray;
+} */
 .editable:hover{
     cursor:pointer;
     background-color: rgb(189, 189, 189);
 }
 .cardMain{
+    padding: 10px;
     flex: 4;
     background-color: white;
     border-radius: 10px;
