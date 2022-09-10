@@ -46,7 +46,7 @@ body{
     grid-column: 2/4;
     border-radius: 10px;
 }
-.card{
+#card{
     height: 100%;
     width: 100%;
     padding: 10px;
@@ -54,7 +54,7 @@ body{
     flex-direction: column;
     gap: 10px;
 }
-.cardHeader{
+#cardHeader{
     padding: 10px;
     flex:1;
     background-color: white;
@@ -70,7 +70,7 @@ body{
     cursor:pointer;
     background-color: rgb(189, 189, 189);
 }
-.cardMain{
+#cardMain{
     padding: 10px;
     flex: 4;
     background-color: white;

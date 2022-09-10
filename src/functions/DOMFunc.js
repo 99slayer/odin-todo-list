@@ -32,6 +32,7 @@ export const DOMMod = (()=>{
                 textElement.innerHTML = input.value;
                 input.parentNode.removeChild(input);
                 textElement.style.display = '';
+                pubsub.publish('newEdit',textElement)
             };
         };
         return {editText};
@@ -40,6 +41,8 @@ export const DOMMod = (()=>{
     const taskCreation = (() =>{
         //x is the taskObj
         const generateTaskCard = (x) =>{
+            console.log(`The generated card is using this ID ${x.taskID}`);
+            // console.log(`THIS CARD WAS GENERATED USING THIS INFO ${x.}`);
             main.replaceChildren();
             const card = document.createElement('div');
             const cardHeader = document.createElement('div');
@@ -81,16 +84,19 @@ export const DOMMod = (()=>{
             };
             const elementNameArray = Object.keys(elementObj);
         
+            // for(let i=elementNameArray.length-1;i>=0;--i){
+            //     elementObj[elementNameArray[i]].classList.add(`${elementNameArray[i]}`);
+            // };
             for(let i=elementNameArray.length-1;i>=0;--i){
-                elementObj[elementNameArray[i]].classList.add(`${elementNameArray[i]}`);
+                elementObj[elementNameArray[i]].setAttribute('id',`${elementNameArray[i]}`);
             };
             main.append(card);
             card.append(cardHeader,cardMain);
             cardHeader.append(title,priority,dueDate);
             cardMain.append(description);
-            console.log('card generated')
+            console.log(x);
+            pubsub.publish('cardGenerated',x.taskID);
         };
-        pubsub.subscribe('',)
         const clearTask = () =>{
             main.replaceChildren();
         };
@@ -101,9 +107,9 @@ export const DOMMod = (()=>{
     const taskTabCreation = (() =>{
         const generateTaskTabs = function(x){
             taskTabs.replaceChildren();
+            // console.log(`x is ${x[0].taskID}`);
             x.forEach((e)=>{
-                const taskInfo = e;
-                console.log(taskInfo);
+                // const taskInfo = e;
                 //can add more elements to the tabs later on
                 const tab = document.createElement('div')
                 const tabHeading = document.createElement('h3');
@@ -111,8 +117,9 @@ export const DOMMod = (()=>{
                 tab.classList.add('tab')
                 tab.setAttribute('data-tab-ID',`${e.taskID}`);
                 tab.addEventListener('click',()=>{
-                    taskCreation.generateTaskCard(taskInfo);
+                    taskCreation.generateTaskCard(e);
                 });
+                //taskInfo should be tab id?
                 taskTabs.append(tab);
                 tab.append(tabHeading);
             });
@@ -127,5 +134,4 @@ export const DOMMod = (()=>{
         }
         pubsub.subscribe('taskObjCreated',taskCreation.generateTaskCard)
     })()
-
 })();

@@ -2,6 +2,7 @@ import { pubsub } from "./pubsub";
 
 const taskObjModule = (()=>{
     const taskStorageArray = [];
+    let currentTaskCardID = '';
     const createTaskObj =(x)=>{
         // console.log(x);
         // generate ID here? and pass it to DOMFunc?
@@ -21,13 +22,24 @@ const taskObjModule = (()=>{
             console.log(taskStorageArray[taskStorageArray.length-1]);
         };
     };
-    const storeTask =(x)=>{
+    pubsub.subscribe('newTask',createTaskObj);
+    const storeTask=(x)=>{
         taskStorageArray.push(x);
         pubsub.publish('taskObjStored',taskStorageArray);
-        console.log('task has been stored and storage array has been published.')
+        console.log('task has been stored and storage array has been published.');
     };
-    pubsub.subscribe('newTask',createTaskObj);
-    // pubsub.subscribe('editTitle',)
+    const setCurrentTaskCard=(x)=>{
+        currentTaskCardID = x;
+        console.log(`currentTaskCard is ${currentTaskCardID}`);
+    };
+    pubsub.subscribe('cardGenerated',setCurrentTaskCard);
+    const editTaskObj=(textElement)=>{
+        const index = taskStorageArray.findIndex(e => e.taskID == currentTaskCardID);
+        //returns index of object that matches the currentTaskCardID
+        taskStorageArray[index][`${textElement.id}`] = textElement.innerHTML;
+        console.log(taskStorageArray[index]);
+    }
+    pubsub.subscribe('newEdit',editTaskObj);
 })();
 
 export{taskObjModule};
