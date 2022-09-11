@@ -46,6 +46,8 @@ export const DOMMod = (()=>{
             main.replaceChildren();
             const card = document.createElement('div');
             const cardHeader = document.createElement('div');
+            const cardHeaderCont1 = document.createElement('div');
+            const cardHeaderCont2 = document.createElement('div');
             const cardMain = document.createElement('div');
         
             const title = document.createElement('h2');
@@ -55,10 +57,46 @@ export const DOMMod = (()=>{
         
             //going to try and make this a fancy check box thing with 4 levels
             //priority will have 4 levels: critical, important, normal, and finished.
-            const priority = document.createElement('p');
-            priority.textContent = `${x.priority}`;
-            priority.classList.add('editable');
-            priority.addEventListener('click',editFunc.editText);
+            //div form label+input*4
+
+            const priorityCont = document.createElement('div');
+            
+            const priorityText = document.createElement('h5');
+            priorityText.textContent = 'test text';
+            // allcaps?
+            // priorityText.textContent = active radio button
+            const priorityForm = document.createElement('form');
+
+            const criticalLabel = document.createElement('label');
+            criticalLabel.setAttribute('for','criticalInput');
+            const importantLabel = document.createElement('label');
+            importantLabel.setAttribute('for','importantInput');
+            const normalLabel = document.createElement('label');
+            normalLabel.setAttribute('for','normalInput');
+            const finishedLabel = document.createElement('label');
+            finishedLabel.setAttribute('for','finishedInput');
+
+            const criticalInput = document.createElement('input');
+            criticalInput.setAttribute('type','radio');
+            criticalInput.setAttribute('value','critical');
+            criticalInput.setAttribute('name','priority');
+            const importantInput = document.createElement('input');
+            importantInput.setAttribute('type','radio');
+            importantInput.setAttribute('value','important');
+            importantInput.setAttribute('name','priority');
+            const normalInput = document.createElement('input');
+            normalInput.setAttribute('type','radio');
+            normalInput.setAttribute('value','normal');
+            normalInput.setAttribute('name','priority');
+            const finishedInput = document.createElement('input');
+            finishedInput.setAttribute('type','radio');
+            finishedInput.setAttribute('value','finished');
+            finishedInput.setAttribute('name','priority');
+
+            // const priority = document.createElement('p');
+            // priority.textContent = `${x.priority}`;
+            // priority.classList.add('editable');
+            // priority.addEventListener('click',editFunc.editText);
         
             //we're gonna try something with an outside library here later.
             const dueDate = document.createElement('p');
@@ -76,9 +114,21 @@ export const DOMMod = (()=>{
             const elementObj = {
                 card,
                 cardHeader,
+                cardHeaderCont1,
+                priorityCont,
+                priorityText,
+                priorityForm,
+                criticalLabel,
+                criticalInput,
+                importantLabel,
+                importantInput,
+                normalLabel,
+                normalInput,
+                finishedLabel,
+                finishedInput,
+                cardHeaderCont2,
                 cardMain,
                 title,
-                priority,
                 dueDate,
                 description,
             };
@@ -92,7 +142,12 @@ export const DOMMod = (()=>{
             };
             main.append(card);
             card.append(cardHeader,cardMain);
-            cardHeader.append(title,priority,dueDate);
+            // cardHeader.append(title,priority,dueDate);
+            cardHeader.append(cardHeaderCont1,cardHeaderCont2);
+            cardHeaderCont1.append(title,priorityCont);
+            priorityCont.append(priorityText,priorityForm);
+            priorityForm.append(criticalLabel,criticalInput,importantLabel,importantInput,normalLabel,normalInput,finishedLabel,finishedInput);
+            cardHeaderCont2.append(dueDate);
             cardMain.append(description);
             console.log(x);
             pubsub.publish('cardGenerated',x.taskID);

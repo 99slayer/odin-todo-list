@@ -8,7 +8,7 @@ const taskObjModule = (()=>{
         // generate ID here? and pass it to DOMFunc?
         const taskMaker =()=>{
             const title = 'Untitled';
-            const priority = 'test';
+            const priority = '';
             const dueDate = 'test';
             const description = 'test';
             //check for duplicate id's in task storage array
