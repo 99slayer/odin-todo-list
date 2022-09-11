@@ -80,6 +80,9 @@ export const DOMMod = (()=>{
             criticalInput.setAttribute('type','radio');
             criticalInput.setAttribute('value','critical');
             criticalInput.setAttribute('name','priority');
+            if(x.priority == 'critical'){
+                criticalInput.setAttribute('checked','true');
+            };
 
             criticalInput.addEventListener('click',()=>{
                 pubsub.publish('priorityChange',criticalInput);
@@ -96,6 +99,9 @@ export const DOMMod = (()=>{
             importantInput.setAttribute('type','radio');
             importantInput.setAttribute('value','important');
             importantInput.setAttribute('name','priority');
+            if(x.priority == 'important'){
+                importantInput.setAttribute('checked','true');
+            };
 
             importantInput.addEventListener('click',()=>{
                 pubsub.publish('priorityChange',importantInput);
@@ -112,6 +118,9 @@ export const DOMMod = (()=>{
             normalInput.setAttribute('type','radio');
             normalInput.setAttribute('value','normal');
             normalInput.setAttribute('name','priority');
+            if(x.priority == 'normal'){
+                normalInput.setAttribute('checked','true');
+            };
 
             normalInput.addEventListener('click',()=>{
                 pubsub.publish('priorityChange',normalInput);
@@ -128,6 +137,9 @@ export const DOMMod = (()=>{
             finishedInput.setAttribute('type','radio');
             finishedInput.setAttribute('value','finished');
             finishedInput.setAttribute('name','priority');
+            if(x.priority == 'finished'){
+                finishedInput.setAttribute('checked','true');
+            };
 
             finishedInput.addEventListener('click',()=>{
                 pubsub.publish('priorityChange',finishedInput);
