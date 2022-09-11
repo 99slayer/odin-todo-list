@@ -80,18 +80,65 @@ export const DOMMod = (()=>{
             criticalInput.setAttribute('type','radio');
             criticalInput.setAttribute('value','critical');
             criticalInput.setAttribute('name','priority');
+
+            criticalInput.addEventListener('click',()=>{
+                pubsub.publish('priorityChange',criticalInput);
+            })
+
+            criticalInput.onclick = function(){
+                console.log(criticalInput.checked);
+                console.log(importantInput.checked);
+                console.log(normalInput.checked);
+                console.log(finishedInput.checked);
+            }
+
             const importantInput = document.createElement('input');
             importantInput.setAttribute('type','radio');
             importantInput.setAttribute('value','important');
             importantInput.setAttribute('name','priority');
+
+            importantInput.addEventListener('click',()=>{
+                pubsub.publish('priorityChange',importantInput);
+            });
+
+            importantInput.onclick = function(){
+                console.log(criticalInput.checked);
+                console.log(importantInput.checked);
+                console.log(normalInput.checked);
+                console.log(finishedInput.checked);
+            }
+
             const normalInput = document.createElement('input');
             normalInput.setAttribute('type','radio');
             normalInput.setAttribute('value','normal');
             normalInput.setAttribute('name','priority');
+
+            normalInput.addEventListener('click',()=>{
+                pubsub.publish('priorityChange',normalInput);
+            });
+
+            normalInput.onclick = function(){
+                console.log(criticalInput.checked);
+                console.log(importantInput.checked);
+                console.log(normalInput.checked);
+                console.log(finishedInput.checked);
+            }
+            
             const finishedInput = document.createElement('input');
             finishedInput.setAttribute('type','radio');
             finishedInput.setAttribute('value','finished');
             finishedInput.setAttribute('name','priority');
+
+            finishedInput.addEventListener('click',()=>{
+                pubsub.publish('priorityChange',finishedInput);
+            });
+
+            finishedInput.onclick = function(){
+                console.log(criticalInput.checked);
+                console.log(importantInput.checked);
+                console.log(normalInput.checked);
+                console.log(finishedInput.checked);
+            }
 
             // const priority = document.createElement('p');
             // priority.textContent = `${x.priority}`;

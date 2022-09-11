@@ -23,23 +23,35 @@ const taskObjModule = (()=>{
         };
     };
     pubsub.subscribe('newTask',createTaskObj);
+
     const storeTask=(x)=>{
         taskStorageArray.push(x);
         pubsub.publish('taskObjStored',taskStorageArray);
         console.log('task has been stored and storage array has been published.');
     };
+
     const setCurrentTaskCard=(x)=>{
         currentTaskCardID = x;
         console.log(`currentTaskCard is ${currentTaskCardID}`);
     };
     pubsub.subscribe('cardGenerated',setCurrentTaskCard);
-    const editTaskObj=(textElement)=>{
+
+    const editTaskText=(textElement)=>{
         const index = taskStorageArray.findIndex(e => e.taskID == currentTaskCardID);
         //returns index of object that matches the currentTaskCardID
         taskStorageArray[index][`${textElement.id}`] = textElement.innerHTML;
         console.log(taskStorageArray[index]);
     }
-    pubsub.subscribe('newEdit',editTaskObj);
+    pubsub.subscribe('newEdit',editTaskText);
+
+    const editTaskPriority=(x)=>{
+        const index = taskStorageArray.findIndex(e => e.taskID == currentTaskCardID);
+        if(x.checked){
+            taskStorageArray[index].priority = x.value;
+            console.log(taskStorageArray[index]);
+        };
+    };
+    pubsub.subscribe('priorityChange',editTaskPriority)
 })();
 
 export{taskObjModule};
