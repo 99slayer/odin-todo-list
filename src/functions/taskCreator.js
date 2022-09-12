@@ -27,7 +27,6 @@ const taskObjModule = (()=>{
     const storeTask=(x)=>{
         taskStorageArray.push(x);
         pubsub.publish('taskObjStored',taskStorageArray);
-        console.log('task has been stored and storage array has been published.');
     };
 
     const setCurrentTaskCard=(x)=>{
@@ -40,6 +39,9 @@ const taskObjModule = (()=>{
         const index = taskStorageArray.findIndex(e => e.taskID == currentTaskCardID);
         //returns index of object that matches the currentTaskCardID
         taskStorageArray[index][`${textElement.id}`] = textElement.innerHTML;
+
+        //Updates sidebar tabs
+        pubsub.publish('textEdit',taskStorageArray);
         console.log(taskStorageArray[index]);
     }
     pubsub.subscribe('newEdit',editTaskText);
@@ -48,6 +50,8 @@ const taskObjModule = (()=>{
         const index = taskStorageArray.findIndex(e => e.taskID == currentTaskCardID);
         if(x.checked){
             taskStorageArray[index].priority = x.value;
+            //Updates sidebar tabs
+            pubsub.publish('priorityEdit',taskStorageArray);
             console.log(taskStorageArray[index]);
         };
     };

@@ -4,14 +4,18 @@
     box-sizing: border-box;
 }
 body{
+    font-family: 'Roboto Flex', sans-serif;
+    --background-color:rgb(109, 109, 109);
+    --main-color:rgb(201, 201, 201);
+    /* --trim-color:; */
     height: 100vh;
-    background-color: rgb(87, 87, 87);
+    background-color: var(--background-color);
 }
 #content{
     padding: 10px;
     height: 100%;
     display: grid;
-    grid-template-columns: 240px 1fr 1fr;
+    grid-template-columns: 260px 1fr 1fr;
     gap: 10px;
 }
 #sidebar{
@@ -19,8 +23,8 @@ body{
     flex-direction: column;
     gap: 10px;
     padding: 10px;
-    background-color: gray;
-    border-radius: 10px;
+    background-color: var(--main-color);
+    /* border-radius: 10%; */
 }
 #sidebarHeader{
     display: flex;
@@ -34,17 +38,46 @@ body{
     color: rgb(41, 172, 41);
     cursor: pointer;
 }
-/* #taskTabs{
-} */
-#taskTabs .tab{
-    height: 20px;
-    background-color: white;
-    border: 1px solid black;
+#taskTabs{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
+#taskTabs .tab{
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 4px;
+    background-color: white;
+    /* border: 1px solid black; */
+    outline: 2px solid black;
+}
+#taskTabs .tab:hover{
+    cursor: pointer;
+}
+.tab .tabCont1{
+    display: flex;
+    justify-content: space-between;
+}
+.tab .tabCont1 .tabPriority{
+    width: 20px;
+    height: 20px;
+    border-radius: 100%;
+    outline: 3px solid var(--background-color);
+    /* background-color: red; */
+}
+/* .tab .tabCont2{
+
+} */
+/* #taskTabs .tab .tabHeading{
+
+} */
 #main{
-    background-color: gray;
+    background-color: var(--main-color);
     grid-column: 2/4;
-    border-radius: 10px;
+    /* border-radius: 10px; */
 }
 #card{
     height: 100%;
@@ -58,7 +91,7 @@ body{
     padding: 10px;
     flex:1;
     background-color: white;
-    border-radius: 10px;
+    /* border-radius: 10px; */
 }
 #cardHeaderCont1{
     display: flex;
@@ -69,11 +102,61 @@ body{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 10px;
     padding: 4px 10px 4px 10px;
     border-radius: 20px;
-    background-color: gray;
+    background-color: var(--background-color);
 }
+/* #priorityForm label{
+    color: black;
+} */
+#priorityForm{
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+input[type='radio']{
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    appearance: none;
+    background-color: var(--main-color);
+}
+input[type='radio']:hover{
+    cursor: pointer;
+    /* border: 2px solid lightblue;
+    outline: rgb(104, 104, 228) solid 2px; */
+}
+/* #criticalInput{
+    background-color: rgb(255, 40, 40);
+    opacity: 40%;
+} */
+#criticalInput:checked{
+    background-color: red;
+}
+/* #importantInput{
+    background-color: rgb(255, 177, 33);
+    opacity: 40%;
+} */
+#importantInput:checked{
+    background-color: orangered;
+}
+/* #normalInput{
+    background-color: rgb(238, 238, 35);
+    opacity: 40%;
+} */
+#normalInput:checked{
+    background-color: yellow;
+}
+/* #finishedInput{
+    background-color: rgb(61, 219, 61);
+    opacity: 40%;
+} */
+#finishedInput:checked{
+    background-color: greenyellow;
+}
+/* input[type='radio']:checked{
+    background-color: gray;
+} */
 /* #cardHeaderCont2{
 
 } */
@@ -91,5 +174,5 @@ body{
     padding: 10px;
     flex: 4;
     background-color: white;
-    border-radius: 10px;
+    /* border-radius: 10px; */
 }

@@ -62,7 +62,13 @@ export const DOMMod = (()=>{
             const priorityCont = document.createElement('div');
             
             const priorityText = document.createElement('h5');
-            priorityText.textContent = 'test text';
+            const generatePriorityText=()=>{
+                priorityText.textContent = `${x.priority.toUpperCase()}`;
+                priorityCont.style.gap = '10px';
+            };
+            if(x.priority!==''){
+                generatePriorityText();
+            };
             // allcaps?
             // priorityText.textContent = active radio button
             const priorityForm = document.createElement('form');
@@ -80,13 +86,15 @@ export const DOMMod = (()=>{
             criticalInput.setAttribute('type','radio');
             criticalInput.setAttribute('value','critical');
             criticalInput.setAttribute('name','priority');
+            criticalInput.setAttribute('title','CRITICAL');
             if(x.priority == 'critical'){
                 criticalInput.setAttribute('checked','true');
             };
 
             criticalInput.addEventListener('click',()=>{
                 pubsub.publish('priorityChange',criticalInput);
-            })
+                generatePriorityText();
+            });
 
             criticalInput.onclick = function(){
                 console.log(criticalInput.checked);
@@ -99,12 +107,14 @@ export const DOMMod = (()=>{
             importantInput.setAttribute('type','radio');
             importantInput.setAttribute('value','important');
             importantInput.setAttribute('name','priority');
+            importantInput.setAttribute('title','IMPORTANT')
             if(x.priority == 'important'){
                 importantInput.setAttribute('checked','true');
             };
 
             importantInput.addEventListener('click',()=>{
                 pubsub.publish('priorityChange',importantInput);
+                generatePriorityText();
             });
 
             importantInput.onclick = function(){
@@ -118,12 +128,14 @@ export const DOMMod = (()=>{
             normalInput.setAttribute('type','radio');
             normalInput.setAttribute('value','normal');
             normalInput.setAttribute('name','priority');
+            normalInput.setAttribute('title','NORMAL');
             if(x.priority == 'normal'){
                 normalInput.setAttribute('checked','true');
             };
 
             normalInput.addEventListener('click',()=>{
                 pubsub.publish('priorityChange',normalInput);
+                generatePriorityText();
             });
 
             normalInput.onclick = function(){
@@ -137,12 +149,14 @@ export const DOMMod = (()=>{
             finishedInput.setAttribute('type','radio');
             finishedInput.setAttribute('value','finished');
             finishedInput.setAttribute('name','priority');
+            finishedInput.setAttribute('title','FINISHED');
             if(x.priority == 'finished'){
                 finishedInput.setAttribute('checked','true');
             };
 
             finishedInput.addEventListener('click',()=>{
                 pubsub.publish('priorityChange',finishedInput);
+                generatePriorityText();
             });
 
             finishedInput.onclick = function(){
@@ -226,19 +240,40 @@ export const DOMMod = (()=>{
                 // const taskInfo = e;
                 //can add more elements to the tabs later on
                 const tab = document.createElement('div')
-                const tabHeading = document.createElement('h3');
-                tabHeading.textContent = `${e.title}`;
                 tab.classList.add('tab')
                 tab.setAttribute('data-tab-ID',`${e.taskID}`);
                 tab.addEventListener('click',()=>{
                     taskCreation.generateTaskCard(e);
                 });
-                //taskInfo should be tab id?
+
+                const tabCont1 = document.createElement('div');
+                tabCont1.classList.add('tabCont1');
+
+                const tabHeading = document.createElement('h3');
+                tabHeading.classList.add('tabHeading');
+                tabHeading.textContent = `${e.title}`;
+                
+                const tabPriority = document.createElement('span');
+                tabPriority.classList.add('tabPriority');
+                // tabPriority.textContent = 'test';
+                tabPriority.style.backgroundColor = 'rgb(201,201,201)';
+
+                const tabCont2 = document.createElement('div');
+                tabCont2.classList.add('tabCont2');
+
+                const tabDueDate = document.createElement('p');
+                tabDueDate.classList.add('tabDueDate');
+                tabDueDate.textContent = `${e.dueDate}`;
+
                 taskTabs.append(tab);
-                tab.append(tabHeading);
+                tab.append(tabCont1,tabCont2);
+                tabCont1.append(tabHeading,tabPriority);
+                tabCont2.append(tabDueDate);
             });
         };
         pubsub.subscribe('taskObjStored',generateTaskTabs);
+        pubsub.subscribe('textEdit',generateTaskTabs);
+        pubsub.subscribe('priorityEdit',generateTaskTabs)
         return {generateTaskTabs};
     })();
 
