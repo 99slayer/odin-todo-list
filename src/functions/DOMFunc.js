@@ -48,7 +48,7 @@ export const DOMMod = (()=>{
             const cardHeader = document.createElement('div');
             const cardHeaderCont1 = document.createElement('div');
             const cardHeaderCont2 = document.createElement('div');
-            const cardMain = document.createElement('div');
+            const cardHeaderCont3 = document.createElement('div');
         
             const title = document.createElement('h2');
             title.textContent = `${x.title}`;
@@ -200,7 +200,7 @@ export const DOMMod = (()=>{
                 finishedLabel,
                 finishedInput,
                 cardHeaderCont2,
-                cardMain,
+                cardHeaderCont3,
                 title,
                 dueDate,
                 description,
@@ -214,14 +214,14 @@ export const DOMMod = (()=>{
                 elementObj[elementNameArray[i]].setAttribute('id',`${elementNameArray[i]}`);
             };
             main.append(card);
-            card.append(cardHeader,cardMain);
+            card.append(cardHeader);
             // cardHeader.append(title,priority,dueDate);
-            cardHeader.append(cardHeaderCont1,cardHeaderCont2);
+            cardHeader.append(cardHeaderCont1,cardHeaderCont2,cardHeaderCont3);
             cardHeaderCont1.append(title,priorityCont);
             priorityCont.append(priorityText,priorityForm);
             priorityForm.append(criticalLabel,criticalInput,importantLabel,importantInput,normalLabel,normalInput,finishedLabel,finishedInput);
             cardHeaderCont2.append(dueDate);
-            cardMain.append(description);
+            cardHeaderCont3.append(description);
             console.log(x);
             pubsub.publish('cardGenerated',x.taskID);
         };
@@ -230,6 +230,10 @@ export const DOMMod = (()=>{
         };
         return{generateTaskCard,clearTask};
     })();
+    
+    const generateSubTaskCards = (()=>{
+
+    })()
     
     //function to generate sidebar tabs whenever a new taskObj is stored.(or changed).
     const taskTabCreation = (() =>{
@@ -255,8 +259,23 @@ export const DOMMod = (()=>{
                 
                 const tabPriority = document.createElement('span');
                 tabPriority.classList.add('tabPriority');
-                // tabPriority.textContent = 'test';
-                tabPriority.style.backgroundColor = 'rgb(201,201,201)';
+                switch(e.priority){
+                    case 'critical':
+                        tabPriority.style.backgroundColor = 'red';
+                        break;
+                    case 'important':
+                        tabPriority.style.backgroundColor = 'orangered';
+                        break;
+                    case 'normal':
+                        tabPriority.style.backgroundColor = 'yellow';
+                        break;
+                    case 'finished':
+                        tabPriority.style.backgroundColor = 'yellowgreen';
+                        break;
+                    default:
+                        tabPriority.style.backgroundColor = 'rgb(201,201,201)';
+                        break;
+                };
 
                 const tabCont2 = document.createElement('div');
                 tabCont2.classList.add('tabCont2');

@@ -9,10 +9,28 @@ const taskObjModule = (()=>{
         const taskMaker =()=>{
             const title = 'Untitled';
             const priority = '';
-            const dueDate = 'test';
-            const description = 'test';
+            const dueDate = 'TEST DUE DATE';
+            const description = 'TEST DESCRIPTION';
+
             //check for duplicate id's in task storage array
-            const taskID = Math.floor(Math.random()*10000);
+            const generateTaskID =()=>{
+                let ID = Math.floor(Math.random()*10000);
+                const TaskIDArray = taskStorageArray.map(x => x.taskID);
+                if(TaskIDArray.find(x => x == ID)){
+                    console.log('WARNING duplicate ID found');
+                    do{
+                        ID = Math.floor(Math.random()*10000);
+                        console.log(`this objects new ID is ${ID}`);
+                    }
+                    while(TaskIDArray.find(x => x == ID));
+                }
+                else{
+                    console.log('no duplicate ID found');
+                };
+                return ID;
+            }
+            const taskID = generateTaskID();
+
             return {title,priority,dueDate,description,taskID};
         };
         if(x){
