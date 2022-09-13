@@ -1,7 +1,7 @@
 import { pubsub } from "./pubsub";
 
 export const DOMMod = (()=>{
-    const sidebar = document.getElementById('sidebar');
+    // const sidebar = document.getElementById('sidebar');
     const taskTabs = document.getElementById('taskTabs');
     const newTaskButton = document.querySelector('.newTaskButton');
     const main = document.getElementById('main');
@@ -41,15 +41,26 @@ export const DOMMod = (()=>{
     const taskCreation = (() =>{
         //x is the taskObj
         const generateTaskCard = (x) =>{
+            if(x === undefined){
+                return;
+            };
             console.log(`The generated card is using this ID ${x.taskID}`);
             // console.log(`THIS CARD WAS GENERATED USING THIS INFO ${x.}`);
             main.replaceChildren();
             const card = document.createElement('div');
             const cardHeader = document.createElement('div');
+            const deleteButtonCont = document.createElement('div');
             const cardHeaderCont1 = document.createElement('div');
             const cardHeaderCont2 = document.createElement('div');
             const cardHeaderCont3 = document.createElement('div');
-        
+
+            //can maybe add an "are you sure?" message later
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'X';
+            deleteButton.onclick = function(){
+                pubsub.publish('taskDeleted',true);
+            };
+
             const title = document.createElement('h2');
             title.textContent = `${x.title}`;
             title.classList.add('editable');
@@ -187,6 +198,8 @@ export const DOMMod = (()=>{
             const elementObj = {
                 card,
                 cardHeader,
+                deleteButtonCont,
+                deleteButton,
                 cardHeaderCont1,
                 priorityCont,
                 priorityText,
@@ -216,7 +229,8 @@ export const DOMMod = (()=>{
             main.append(card);
             card.append(cardHeader);
             // cardHeader.append(title,priority,dueDate);
-            cardHeader.append(cardHeaderCont1,cardHeaderCont2,cardHeaderCont3);
+            cardHeader.append(deleteButtonCont,cardHeaderCont1,cardHeaderCont2,cardHeaderCont3);
+            deleteButtonCont.append(deleteButton);
             cardHeaderCont1.append(title,priorityCont);
             priorityCont.append(priorityText,priorityForm);
             priorityForm.append(criticalLabel,criticalInput,importantLabel,importantInput,normalLabel,normalInput,finishedLabel,finishedInput);
@@ -228,7 +242,8 @@ export const DOMMod = (()=>{
         const clearTask = () =>{
             main.replaceChildren();
         };
-        return{generateTaskCard,clearTask};
+        pubsub.subscribe('taskObjDeleted',generateTaskCard);
+        return{generateTaskCard};
     })();
     
     const generateSubTaskCards = (()=>{
@@ -293,6 +308,7 @@ export const DOMMod = (()=>{
         pubsub.subscribe('taskObjStored',generateTaskTabs);
         pubsub.subscribe('textEdit',generateTaskTabs);
         pubsub.subscribe('priorityEdit',generateTaskTabs)
+        pubsub.subscribe('taskStorageAdjusted',generateTaskTabs);
         return {generateTaskTabs};
     })();
 
@@ -301,5 +317,5 @@ export const DOMMod = (()=>{
             pubsub.publish('newTask',true);
         }
         pubsub.subscribe('taskObjCreated',taskCreation.generateTaskCard)
-    })()
+    })();
 })();

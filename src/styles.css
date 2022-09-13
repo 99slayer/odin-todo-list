@@ -117,7 +117,7 @@ body{
 #priorityForm{
     display: flex;
     align-items: center;
-    gap: 2px;
+    gap: 3px;
 }
 input[type='radio']{
     width: 18px;
