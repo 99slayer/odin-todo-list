@@ -11,6 +11,7 @@ const taskObjModule = (()=>{
             const priority = '';
             const dueDate = 'TEST DUE DATE';
             const description = 'TEST DESCRIPTION';
+            const subTaskArray = [];
 
             //check for duplicate id's in task storage array
             const generateTaskID =()=>{
@@ -77,12 +78,13 @@ const taskObjModule = (()=>{
 
     const deleteTask=(x)=>{
         if(x){
-            //find object with current task id and pop out of storage array.
-            //find index
-            const index = taskStorageArray.findIndex(x => x.taskID == currentTaskCardID);
+            let index = taskStorageArray.findIndex(x => x.taskID == currentTaskCardID);
             taskStorageArray.splice(index,1);
-            // console.log(`this is the modified task storage array ${taskStorageArray}`);
-            pubsub.publish('taskObjDeleted',taskStorageArray[index-1]);
+            //length has changed 
+            if(index==taskStorageArray.length){
+                index = index - 1;
+            };
+            pubsub.publish('taskObjDeleted',taskStorageArray[index]);
             pubsub.publish('taskStorageAdjusted',taskStorageArray);
         };
     };

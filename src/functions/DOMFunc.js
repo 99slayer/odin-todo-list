@@ -41,12 +41,13 @@ export const DOMMod = (()=>{
     const taskCreation = (() =>{
         //x is the taskObj
         const generateTaskCard = (x) =>{
+            main.replaceChildren();
             if(x === undefined){
                 return;
             };
+
             console.log(`The generated card is using this ID ${x.taskID}`);
-            // console.log(`THIS CARD WAS GENERATED USING THIS INFO ${x.}`);
-            main.replaceChildren();
+
             const card = document.createElement('div');
             const cardHeader = document.createElement('div');
             const deleteButtonCont = document.createElement('div');
