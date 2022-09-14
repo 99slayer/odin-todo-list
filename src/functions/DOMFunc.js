@@ -38,7 +38,7 @@ export const DOMMod = (()=>{
         return {editText};
     })();
 
-    const taskCreation = (() =>{
+    const taskCardCreation = (() =>{
         //x is the taskObj
         const generateTaskCard = (x) =>{
             main.replaceChildren();
@@ -49,6 +49,7 @@ export const DOMMod = (()=>{
             console.log(`The generated card is using this ID ${x.taskID}`);
 
             const card = document.createElement('div');
+            const newSubTaskButton = document.createElement('button');
             const cardHeader = document.createElement('div');
             const deleteButtonCont = document.createElement('div');
             const cardHeaderCont1 = document.createElement('div');
@@ -61,6 +62,11 @@ export const DOMMod = (()=>{
             deleteButton.onclick = function(){
                 pubsub.publish('taskDeleted',true);
             };
+            
+            newSubTaskButton.onclick = function(){
+                pubsub.publish('createNewSubTask',true);
+            };
+            //new subtask 'createNewSubTask'
 
             const title = document.createElement('h2');
             title.textContent = `${x.title}`;
@@ -198,6 +204,7 @@ export const DOMMod = (()=>{
             // seperate all creation into one module then return an object with all created elements and run in through the class adding function?
             const elementObj = {
                 card,
+                newSubTaskButton,
                 cardHeader,
                 deleteButtonCont,
                 deleteButton,
@@ -228,7 +235,7 @@ export const DOMMod = (()=>{
                 elementObj[elementNameArray[i]].setAttribute('id',`${elementNameArray[i]}`);
             };
             main.append(card);
-            card.append(cardHeader);
+            card.append(cardHeader,newSubTaskButton);
             // cardHeader.append(title,priority,dueDate);
             cardHeader.append(deleteButtonCont,cardHeaderCont1,cardHeaderCont2,cardHeaderCont3);
             deleteButtonCont.append(deleteButton);
@@ -247,8 +254,8 @@ export const DOMMod = (()=>{
         return{generateTaskCard};
     })();
     
-    const generateSubTaskCards = (()=>{
-
+    const subTaskCardCreation = ((x)=>{
+        //x is the current task object
     })()
     
     //function to generate sidebar tabs whenever a new taskObj is stored.(or changed).
@@ -263,7 +270,7 @@ export const DOMMod = (()=>{
                 tab.classList.add('tab')
                 tab.setAttribute('data-tab-ID',`${e.taskID}`);
                 tab.addEventListener('click',()=>{
-                    taskCreation.generateTaskCard(e);
+                    taskCardCreation.generateTaskCard(e);
                 });
 
                 const tabCont1 = document.createElement('div');
@@ -317,6 +324,6 @@ export const DOMMod = (()=>{
         newTaskButton.onclick =()=>{
             pubsub.publish('newTask',true);
         }
-        pubsub.subscribe('taskObjCreated',taskCreation.generateTaskCard)
+        pubsub.subscribe('taskObjCreated',taskCardCreation.generateTaskCard)
     })();
 })();

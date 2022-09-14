@@ -2,6 +2,7 @@ import { pubsub } from "./pubsub";
 
 const taskObjModule = (()=>{
     const taskStorageArray = [];
+    //should i just change this to current task object?
     let currentTaskCardID = '';
     const createTaskObj =(x)=>{
         // console.log(x);
@@ -32,7 +33,7 @@ const taskObjModule = (()=>{
             }
             const taskID = generateTaskID();
 
-            return {title,priority,dueDate,description,taskID};
+            return {title,priority,dueDate,description,subTaskArray,taskID};
         };
         if(x){
             storeTask(taskMaker());
@@ -47,6 +48,14 @@ const taskObjModule = (()=>{
         taskStorageArray.push(x);
         pubsub.publish('taskObjStored',taskStorageArray);
     };
+
+    const storeSubTask=(x)=>{
+        let index = taskStorageArray.findIndex(e => e.taskID == currentTaskCardID);
+        console.log(taskStorageArray[index]);
+        taskStorageArray[index].subTaskArray.push(x);
+        console.log(taskStorageArray[index]);
+    };
+    pubsub.subscribe('newSubTaskCreated',storeSubTask)
 
     const setCurrentTaskCard=(x)=>{
         currentTaskCardID = x;
