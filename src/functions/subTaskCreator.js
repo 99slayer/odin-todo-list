@@ -3,10 +3,10 @@ import { pubsub } from "./pubsub";
 const subTaskObjModule = (()=>{
     const subTaskMaker=(x)=>{
         const createSubTask=()=>{
-            const title = '';
+            const title = 'Untitled';
             const priority = '';
-            const dueDate = '';
-            const description = '';
+            const dueDate = 'TEST DUEDATE';
+            const description = 'TEST DESCRIPTION';
             return {title,priority,dueDate,description};
         };
         if(x){

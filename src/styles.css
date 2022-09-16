@@ -185,3 +185,12 @@ input[type='radio']:hover{
 #cardHeaderCont3{
     border: 1px solid black;
 }
+#subTasks{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+#subTasks .subTask{
+    background-color: white;
+    border: 2px solid black;
+}

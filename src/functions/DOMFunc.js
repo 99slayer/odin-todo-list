@@ -114,13 +114,6 @@ export const DOMMod = (()=>{
                 generatePriorityText();
             });
 
-            criticalInput.onclick = function(){
-                console.log(criticalInput.checked);
-                console.log(importantInput.checked);
-                console.log(normalInput.checked);
-                console.log(finishedInput.checked);
-            }
-
             const importantInput = document.createElement('input');
             importantInput.setAttribute('type','radio');
             importantInput.setAttribute('value','important');
@@ -134,13 +127,6 @@ export const DOMMod = (()=>{
                 pubsub.publish('priorityChange',importantInput);
                 generatePriorityText();
             });
-
-            importantInput.onclick = function(){
-                console.log(criticalInput.checked);
-                console.log(importantInput.checked);
-                console.log(normalInput.checked);
-                console.log(finishedInput.checked);
-            }
 
             const normalInput = document.createElement('input');
             normalInput.setAttribute('type','radio');
@@ -156,13 +142,6 @@ export const DOMMod = (()=>{
                 generatePriorityText();
             });
 
-            normalInput.onclick = function(){
-                console.log(criticalInput.checked);
-                console.log(importantInput.checked);
-                console.log(normalInput.checked);
-                console.log(finishedInput.checked);
-            }
-            
             const finishedInput = document.createElement('input');
             finishedInput.setAttribute('type','radio');
             finishedInput.setAttribute('value','finished');
@@ -177,18 +156,6 @@ export const DOMMod = (()=>{
                 generatePriorityText();
             });
 
-            finishedInput.onclick = function(){
-                console.log(criticalInput.checked);
-                console.log(importantInput.checked);
-                console.log(normalInput.checked);
-                console.log(finishedInput.checked);
-            }
-
-            // const priority = document.createElement('p');
-            // priority.textContent = `${x.priority}`;
-            // priority.classList.add('editable');
-            // priority.addEventListener('click',editFunc.editText);
-        
             //we're gonna try something with an outside library here later.
             const dueDate = document.createElement('p');
             dueDate.textContent = `${x.dueDate}`;
@@ -244,7 +211,9 @@ export const DOMMod = (()=>{
             priorityForm.append(criticalLabel,criticalInput,importantLabel,importantInput,normalLabel,normalInput,finishedLabel,finishedInput);
             cardHeaderCont2.append(dueDate);
             cardHeaderCont3.append(description);
-            console.log(x);
+
+            //need to add something here that triggers the tasks subtask generation.
+            subTaskCardCreation.generateSubTasks(x.subTaskArray);
             pubsub.publish('cardGenerated',x.taskID);
         };
         const clearTask = () =>{
@@ -254,18 +223,72 @@ export const DOMMod = (()=>{
         return{generateTaskCard};
     })();
     
-    const subTaskCardCreation = ((x)=>{
-        //x is the current task object
-    })()
+    const subTaskCardCreation = (()=>{
+        //x is the current task objects subtask array
+        const subTasks = document.createElement('div');
+        subTasks.setAttribute('id','subTasks');
+        
+        const generateSubTasks=(x)=>{
+            //x is the subtask array
+            //e is a subtask array object
+            subTasks.replaceChildren();
+            let index = 0;
+            x.forEach((e)=>{
+                const subTask = document.createElement('div');
+                subTask.classList.add('subTask');
+                subTask.setAttribute('data-index',`${index}`);
+                const subTaskCont1 = document.createElement('div');
+                const subTaskCont2 = document.createElement('div');
+                const subTaskCont3 = document.createElement('div');
+                const subTaskCont4 = document.createElement('div');
+                const subTaskDeleteButton = document.createElement('button');
+                subTaskDeleteButton.textContent = 'X';
+                const title = document.createElement('h5');
+                title.textContent = `${e.title}`;
+                title.addEventListener('click',editFunc.editText);
+                title.classList.add('title');
+                const priorityCont = document.createElement('div');
+                const priorityForm = document.createElement('form');
+                const criticalInput = document.createElement('input')
+                criticalInput.setAttribute('type','radio');
+                const importantInput = document.createElement('input');
+                importantInput.setAttribute('type','radio');
+                const normalInput = document.createElement('input');
+                normalInput.setAttribute('type','radio');
+                const finishedInput = document.createElement('input');
+                finishedInput.setAttribute('type','radio');
+                const dueDate = document.createElement('p');
+                dueDate.textContent = `${e.dueDate}`;
+                dueDate.addEventListener('click',editFunc.editText);
+                dueDate.classList.add('dueDate');
+                const description = document.createElement('p');
+                description.textContent = `${e.description}`;
+                description.addEventListener('click',editFunc.editText);
+                description.classList.add('description');
+
+                index = index + 1;
+                main.append(subTasks);
+                subTasks.append(subTask);
+                subTask.append(subTaskCont1,subTaskCont2,subTaskCont3,subTaskCont4);
+                subTaskCont1.append(subTaskDeleteButton);
+                subTaskCont2.append(title,priorityCont);
+                priorityCont.append(priorityForm);
+                priorityForm.append(criticalInput,importantInput,normalInput,finishedInput);
+                subTaskCont3.append(dueDate);
+                subTaskCont4.append(description);
+                // console.log(title.parentNode.parentNode);
+            });
+        };
+        pubsub.subscribe('newSubTaskStored',generateSubTasks);
+        return{generateSubTasks};
+    })();
     
     //function to generate sidebar tabs whenever a new taskObj is stored.(or changed).
     const taskTabCreation = (() =>{
+        //x is the task storage array
         const generateTaskTabs = function(x){
             taskTabs.replaceChildren();
-            // console.log(`x is ${x[0].taskID}`);
             x.forEach((e)=>{
-                // const taskInfo = e;
-                //can add more elements to the tabs later on
                 const tab = document.createElement('div')
                 tab.classList.add('tab')
                 tab.setAttribute('data-tab-ID',`${e.taskID}`);

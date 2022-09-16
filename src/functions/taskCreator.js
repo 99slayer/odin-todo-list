@@ -3,6 +3,7 @@ import { pubsub } from "./pubsub";
 const taskObjModule = (()=>{
     const taskStorageArray = [];
     //should i just change this to current task object?
+    //yes, it seems like this would be a good change ^^^
     let currentTaskCardID = '';
     const createTaskObj =(x)=>{
         // console.log(x);
@@ -49,14 +50,6 @@ const taskObjModule = (()=>{
         pubsub.publish('taskObjStored',taskStorageArray);
     };
 
-    const storeSubTask=(x)=>{
-        let index = taskStorageArray.findIndex(e => e.taskID == currentTaskCardID);
-        console.log(taskStorageArray[index]);
-        taskStorageArray[index].subTaskArray.push(x);
-        console.log(taskStorageArray[index]);
-    };
-    pubsub.subscribe('newSubTaskCreated',storeSubTask)
-
     const setCurrentTaskCard=(x)=>{
         currentTaskCardID = x;
         console.log(`currentTaskCard is ${currentTaskCardID}`);
@@ -98,6 +91,26 @@ const taskObjModule = (()=>{
         };
     };
     pubsub.subscribe('taskDeleted',deleteTask);
+
+    //x is the newly created subtask object
+    const storeSubTask=(x)=>{
+        let index = taskStorageArray.findIndex(e => e.taskID == currentTaskCardID);
+        console.log(taskStorageArray[index]);
+        taskStorageArray[index].subTaskArray.push(x);
+        console.log(taskStorageArray[index]);
+        console.log(taskStorageArray[index].subTaskArray);
+        pubsub.publish('newSubTaskStored',taskStorageArray[index].subTaskArray);
+    };
+    pubsub.subscribe('newSubTaskCreated',storeSubTask)
+
+    //x is the text element that we've edited 
+    const editSubtask=(x)=>{
+        const subTaskIndex = x.parentNode.parentNode.getAttribute('data-index');
+        const taskIndex = taskStorageArray.findIndex(e => e.taskID == currentTaskCardID);
+        taskStorageArray[taskIndex].subTaskArray[subTaskIndex][`${x.getAttribute('class')}`] = x.innerHTML;
+        // console.log(taskStorageArray[taskIndex].subTaskArray[subTaskIndex][`${x.getAttribute('class')}`]);
+    }
+    pubsub.subscribe('newEdit',editSubtask);
 })();
 
 export{taskObjModule};
