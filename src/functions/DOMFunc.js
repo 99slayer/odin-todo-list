@@ -247,20 +247,78 @@ export const DOMMod = (()=>{
                 title.textContent = `${e.title}`;
                 title.addEventListener('click',editFunc.editText);
                 title.classList.add('title');
+
                 const priorityCont = document.createElement('div');
+                const priorityText = document.createElement('h5');
+                priorityText.textContent = `${e.priority}`;
                 const priorityForm = document.createElement('form');
+
+                const generateSubPriorityText=()=>{
+                    priorityText.textContent = `${e.priority}`;
+                };
                 const criticalInput = document.createElement('input')
                 criticalInput.setAttribute('type','radio');
+                criticalInput.setAttribute('value','critical');
+                criticalInput.setAttribute('name',`subPriority${index}`);
+                criticalInput.setAttribute('title','CRITICAL');
+                criticalInput.classList.add('criticalInput');
+                if(e.priority=='critical'){
+                    criticalInput.setAttribute('checked','true');
+                };
+                criticalInput.addEventListener('click',()=>{
+                    pubsub.publish('subPriorityChange',criticalInput);
+                    generateSubPriorityText();
+                });
+                
                 const importantInput = document.createElement('input');
                 importantInput.setAttribute('type','radio');
+                importantInput.setAttribute('value','important');
+                importantInput.setAttribute('name',`subPriority${index}`);
+                importantInput.setAttribute('title','IMPORTANT')
+                importantInput.classList.add('importantInput');
+                if(e.priority=='important'){
+                    importantInput.setAttribute('checked','true');
+                };
+                importantInput.addEventListener('click',()=>{
+                    pubsub.publish('subPriorityChange',importantInput);
+                    generateSubPriorityText();
+                });
+
                 const normalInput = document.createElement('input');
                 normalInput.setAttribute('type','radio');
+                normalInput.setAttribute('value','normal');
+                normalInput.setAttribute('name',`subPriority${index}`);
+                normalInput.setAttribute('title','NORMAL');
+                normalInput.classList.add('normalInput');
+                if(e.priority=='normal'){
+                    normalInput.setAttribute('checked','true');
+                };
+                normalInput.addEventListener('click',()=>{
+                    pubsub.publish('subPriorityChange',normalInput);
+                    generateSubPriorityText();
+                });
+
+
                 const finishedInput = document.createElement('input');
                 finishedInput.setAttribute('type','radio');
+                finishedInput.setAttribute('value','finished');
+                finishedInput.setAttribute('name',`subPriority${index}`);
+                finishedInput.setAttribute('title','FINISHED');
+                finishedInput.classList.add('finishedInput');
+                if(e.priority=='finished'){
+                    finishedInput.setAttribute('checked','true');
+                };
+                finishedInput.addEventListener('click',()=>{
+                    pubsub.publish('subPriorityChange',finishedInput);
+                    generateSubPriorityText();
+                });
+
+
                 const dueDate = document.createElement('p');
                 dueDate.textContent = `${e.dueDate}`;
                 dueDate.addEventListener('click',editFunc.editText);
                 dueDate.classList.add('dueDate');
+
                 const description = document.createElement('p');
                 description.textContent = `${e.description}`;
                 description.addEventListener('click',editFunc.editText);
@@ -272,7 +330,7 @@ export const DOMMod = (()=>{
                 subTask.append(subTaskCont1,subTaskCont2,subTaskCont3,subTaskCont4);
                 subTaskCont1.append(subTaskDeleteButton);
                 subTaskCont2.append(title,priorityCont);
-                priorityCont.append(priorityForm);
+                priorityCont.append(priorityText,priorityForm);
                 priorityForm.append(criticalInput,importantInput,normalInput,finishedInput);
                 subTaskCont3.append(dueDate);
                 subTaskCont4.append(description);

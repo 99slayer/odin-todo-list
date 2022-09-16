@@ -104,13 +104,27 @@ const taskObjModule = (()=>{
     pubsub.subscribe('newSubTaskCreated',storeSubTask)
 
     //x is the text element that we've edited 
-    const editSubtask=(x)=>{
+    const editSubTaskText=(x)=>{
+        //pretty sure this is a cursed way to do this but it works for now
+        if(x.parentNode.parentNode.getAttribute('class')!=='subTask'){
+            return;
+        };
         const subTaskIndex = x.parentNode.parentNode.getAttribute('data-index');
         const taskIndex = taskStorageArray.findIndex(e => e.taskID == currentTaskCardID);
         taskStorageArray[taskIndex].subTaskArray[subTaskIndex][`${x.getAttribute('class')}`] = x.innerHTML;
-        // console.log(taskStorageArray[taskIndex].subTaskArray[subTaskIndex][`${x.getAttribute('class')}`]);
     }
-    pubsub.subscribe('newEdit',editSubtask);
+    pubsub.subscribe('newEdit',editSubTaskText);
+
+    //x is the input element
+    const editSubTaskPriority=(x)=>{
+        const subTaskIndex = x.parentNode.parentNode.parentNode.parentNode.getAttribute('data-index');
+        const taskIndex = taskStorageArray.findIndex(e => e.taskID == currentTaskCardID);
+        if(x.checked){
+            taskStorageArray[taskIndex].subTaskArray[subTaskIndex].priority = x.value;
+            console.log(taskStorageArray[taskIndex].subTaskArray[subTaskIndex].priority);
+        };
+    };
+    pubsub.subscribe('subPriorityChange',editSubTaskPriority)
 })();
 
 export{taskObjModule};

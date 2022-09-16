@@ -139,28 +139,28 @@ input[type='radio']:hover{
     background-color: rgb(255, 40, 40);
     opacity: 40%;
 } */
-#criticalInput:checked{
+#criticalInput:checked,.criticalInput:checked{
     background-color: red;
 }
 /* #importantInput{
     background-color: rgb(255, 177, 33);
     opacity: 40%;
 } */
-#importantInput:checked{
+#importantInput:checked,.importantInput:checked{
     background-color: orangered;
 }
 /* #normalInput{
     background-color: rgb(238, 238, 35);
     opacity: 40%;
 } */
-#normalInput:checked{
+#normalInput:checked,.normalInput:checked{
     background-color: yellow;
 }
 /* #finishedInput{
     background-color: rgb(61, 219, 61);
     opacity: 40%;
 } */
-#finishedInput:checked{
+#finishedInput:checked,.finishedInput:checked{
     background-color: greenyellow;
 }
 /* input[type='radio']:checked{
