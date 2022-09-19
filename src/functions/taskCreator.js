@@ -125,6 +125,17 @@ const taskObjModule = (()=>{
         };
     };
     pubsub.subscribe('subPriorityChange',editSubTaskPriority)
+
+    //x is the subtask index
+    const deleteSubTask=(x)=>{
+        //current
+        const taskIndex = taskStorageArray.findIndex(e => e.taskID == currentTaskCardID);
+        taskStorageArray[taskIndex].subTaskArray.splice(x,1);
+        console.log(taskStorageArray[taskIndex].subTaskArray);
+        console.log(x);
+        pubsub.publish('subTaskDeleted',taskStorageArray[taskIndex].subTaskArray)
+    };
+    pubsub.subscribe('deleteSubTask',deleteSubTask);
 })();
 
 export{taskObjModule};

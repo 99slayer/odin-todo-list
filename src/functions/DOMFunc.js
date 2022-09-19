@@ -234,6 +234,7 @@ export const DOMMod = (()=>{
             subTasks.replaceChildren();
             let index = 0;
             x.forEach((e)=>{
+                const subTaskIndex = index;
                 const subTask = document.createElement('div');
                 subTask.classList.add('subTask');
                 subTask.setAttribute('data-index',`${index}`);
@@ -241,8 +242,13 @@ export const DOMMod = (()=>{
                 const subTaskCont2 = document.createElement('div');
                 const subTaskCont3 = document.createElement('div');
                 const subTaskCont4 = document.createElement('div');
+                
                 const subTaskDeleteButton = document.createElement('button');
                 subTaskDeleteButton.textContent = 'X';
+                subTaskDeleteButton.onclick =()=>{
+                    pubsub.publish('deleteSubTask',subTaskIndex);
+                };
+
                 const title = document.createElement('h5');
                 title.textContent = `${e.title}`;
                 title.addEventListener('click',editFunc.editText);
@@ -256,6 +262,7 @@ export const DOMMod = (()=>{
                 const generateSubPriorityText=()=>{
                     priorityText.textContent = `${e.priority}`;
                 };
+
                 const criticalInput = document.createElement('input')
                 criticalInput.setAttribute('type','radio');
                 criticalInput.setAttribute('value','critical');
@@ -338,6 +345,7 @@ export const DOMMod = (()=>{
             });
         };
         pubsub.subscribe('newSubTaskStored',generateSubTasks);
+        pubsub.subscribe('subTaskDeleted',generateSubTasks);
         return{generateSubTasks};
     })();
     
