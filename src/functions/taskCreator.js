@@ -2,18 +2,16 @@ import { pubsub } from "./pubsub";
 
 const taskObjModule = (()=>{
     const taskStorageArray = [];
-    //should i just change this to current task object?
-    //yes, it seems like this would be a good change ^^^
-    let currentTaskCardID = '';
+    let currentTask = '';
+
     const createTaskObj =(x)=>{
-        // console.log(x);
-        // generate ID here? and pass it to DOMFunc?
         const taskMaker =()=>{
             const title = 'Untitled';
             const priority = '';
             const dueDate = 'TEST DUE DATE';
             const description = 'TEST DESCRIPTION';
             const subTaskArray = [];
+            const isTask = true;
 
             //check for duplicate id's in task storage array
             const generateTaskID =()=>{
@@ -22,7 +20,7 @@ const taskObjModule = (()=>{
                 if(TaskIDArray.find(x => x == ID)){
                     console.log('WARNING duplicate ID found');
                     do{
-                        ID = Math.floor(Math.random()*10000);
+                        ID = 1 + Math.floor(Math.random()*10000);
                         console.log(`this objects new ID is ${ID}`);
                     }
                     while(TaskIDArray.find(x => x == ID));
@@ -34,106 +32,136 @@ const taskObjModule = (()=>{
             }
             const taskID = generateTaskID();
 
-            return {title,priority,dueDate,description,subTaskArray,taskID};
+            return {title,priority,dueDate,description,subTaskArray,isTask,taskID};
         };
         if(x){
             storeTask(taskMaker());
             //publishes new taskObj
-            pubsub.publish('taskObjCreated',taskStorageArray[taskStorageArray.length-1]);
-            console.log(taskStorageArray[taskStorageArray.length-1]);
+			setCurrentTask(taskStorageArray[taskStorageArray.length-1]);
+            // pubsub.publish('taskObjCreated',taskStorageArray[taskStorageArray.length-1]);
         };
     };
     pubsub.subscribe('newTask',createTaskObj);
 
+    const setCurrentTask=(x)=>{
+        currentTask = x;
+		pubsub.publish('newCurrentTask',x);
+    };
+    // pubsub.subscribe('cardGenerated',setCurrentTask);
+	pubsub.subscribe('tabSelected',setCurrentTask);
+
     const storeTask=(x)=>{
         taskStorageArray.push(x);
-        pubsub.publish('taskObjStored',taskStorageArray);
+        pubsub.publish('taskStorageChange',taskStorageArray);
     };
+    const deleteTask=(deleteButton)=>{
+        let taskIndex = taskStorageArray.indexOf(currentTask);
+        if(deleteButton.getAttribute('data-task-ID')){
+            taskStorageArray.splice(taskIndex,1);
+            //length has changed 
+            if(taskIndex==taskStorageArray.length){
+                taskIndex = taskIndex - 1;
+            };
+            //this signals to render the new 'current task'
+            setCurrentTask(taskStorageArray[taskIndex]);
+            pubsub.publish('taskStorageChange',taskStorageArray);
+        };
+        if(deleteButton.getAttribute('data-subtask-ID')){
+            const elementID = deleteButton.getAttribute('data-subtask-ID');
+            const subTask = currentTask.subTaskArray.find(e => e.subTaskID == elementID);
+            const subTaskIndex = currentTask.subTaskArray.indexOf(subTask);
+            taskStorageArray[taskIndex].subTaskArray.splice(subTaskIndex,1);
+            pubsub.publish('subTaskDeleted',currentTask);
+        };
 
-    const setCurrentTaskCard=(x)=>{
-        currentTaskCardID = x;
-        console.log(`currentTaskCard is ${currentTaskCardID}`);
     };
-    pubsub.subscribe('cardGenerated',setCurrentTaskCard);
+    pubsub.subscribe('deleteTask',deleteTask);
 
     const editTaskText=(textElement)=>{
-        const index = taskStorageArray.findIndex(e => e.taskID == currentTaskCardID);
-        //returns index of object that matches the currentTaskCardID
-        taskStorageArray[index][`${textElement.id}`] = textElement.innerHTML;
-
-        //Updates sidebar tabs
-        pubsub.publish('textEdit',taskStorageArray);
-        console.log(taskStorageArray[index]);
+        const taskIndex = taskStorageArray.indexOf(currentTask);
+        if(textElement.getAttribute('data-task-ID')){
+            console.log('MAIN TASK EDIT.');
+            taskStorageArray[taskIndex][`${textElement.getAttribute('class')}`] = textElement.innerHTML;
+        };
+        if(textElement.getAttribute('data-subtask-ID')){
+            console.log('SUBTASK EDIT.');
+            const elementID = textElement.getAttribute('data-subtask-ID');
+            const subTask = currentTask.subTaskArray.find(e => e.subTaskID == elementID);
+            const subTaskIndex = currentTask.subTaskArray.indexOf(subTask);
+            taskStorageArray[taskIndex].subTaskArray[subTaskIndex][`${textElement.getAttribute('class')}`] = textElement.innerHTML;
+        };
+        pubsub.publish('taskEdit',currentTask);
+        pubsub.publish('tabElementChange',taskStorageArray);
     }
     pubsub.subscribe('newEdit',editTaskText);
 
-    const editTaskPriority=(x)=>{
-        const index = taskStorageArray.findIndex(e => e.taskID == currentTaskCardID);
-        if(x.checked){
-            taskStorageArray[index].priority = x.value;
-            //Updates sidebar tabs
-            pubsub.publish('priorityEdit',taskStorageArray);
-            console.log(taskStorageArray[index]);
+    const editTaskPriority=(priorityElement)=>{
+        const taskIndex = taskStorageArray.indexOf(currentTask);
+        if(priorityElement.parentNode.getAttribute('data-task-ID')){
+            taskStorageArray[taskIndex].priority = priorityElement.value;
         };
+        if(priorityElement.parentNode.getAttribute('data-subtask-ID')){
+            const elementID = priorityElement.parentNode.getAttribute('data-subtask-ID');
+            const subTask = currentTask.subTaskArray.find(e => e.subTaskID == elementID);
+            const subTaskIndex = currentTask.subTaskArray.indexOf(subTask);
+            taskStorageArray[taskIndex].subTaskArray[subTaskIndex].priority = priorityElement.value;
+        };
+        // if(priorityElement.checked){
+        //     taskStorageArray[taskIndex].priority = priorityElement.value;
+        // };
+        pubsub.publish('tabElementChange',taskStorageArray);
     };
     pubsub.subscribe('priorityChange',editTaskPriority)
 
-    const deleteTask=(x)=>{
-        if(x){
-            let index = taskStorageArray.findIndex(x => x.taskID == currentTaskCardID);
-            taskStorageArray.splice(index,1);
-            //length has changed 
-            if(index==taskStorageArray.length){
-                index = index - 1;
-            };
-            pubsub.publish('taskObjDeleted',taskStorageArray[index]);
-            pubsub.publish('taskStorageAdjusted',taskStorageArray);
-        };
-    };
-    pubsub.subscribe('taskDeleted',deleteTask);
 
+
+
+	const subTaskObjModule = (()=>{
+		const subTaskMaker=(x)=>{
+			const createSubTask=()=>{
+				const title = 'Untitled';
+				const priority = '';
+				const dueDate = 'TEST DUEDATE';
+				const description = 'TEST DESCRIPTION';
+                const isTask = false;
+				const generateTaskID =()=>{
+					let ID = Math.floor(Math.random()*10000);
+					const TaskIDArray = currentTask.subTaskArray.map(x => x.subTaskID);
+					if(TaskIDArray.find(x => x == ID)){
+						console.log('WARNING duplicate ID found');
+						do{
+							ID = Math.floor(Math.random()*10000);
+							console.log(`this objects new ID is ${ID}`);
+						}
+						while(TaskIDArray.find(x => x == ID));
+					}
+					else{
+						console.log('no duplicate ID found');
+					};
+					return ID;
+				}
+				const subTaskID = generateTaskID();
+	
+				return {title,priority,dueDate,description,isTask,subTaskID};
+			};
+			if(x){
+				storeSubTask(createSubTask());
+				pubsub.publish('newSubTask',currentTask);
+			};
+		};
+		pubsub.subscribe('createNewSubTask',subTaskMaker);
+	})();
     //x is the newly created subtask object
     const storeSubTask=(x)=>{
-        let index = taskStorageArray.findIndex(e => e.taskID == currentTaskCardID);
-        console.log(taskStorageArray[index]);
-        taskStorageArray[index].subTaskArray.push(x);
-        console.log(taskStorageArray[index]);
-        console.log(taskStorageArray[index].subTaskArray);
-        pubsub.publish('newSubTaskStored',taskStorageArray[index].subTaskArray);
+		currentTask.subTaskArray.push(x);
     };
-    pubsub.subscribe('newSubTaskCreated',storeSubTask)
-
-    //x is the text element that we've edited 
-    const editSubTaskText=(x)=>{
-        //pretty sure this is a cursed way to do this but it works for now
-        if(x.parentNode.parentNode.getAttribute('class')!=='subTask'){
-            return;
-        };
-        const subTaskIndex = x.parentNode.parentNode.getAttribute('data-index');
-        const taskIndex = taskStorageArray.findIndex(e => e.taskID == currentTaskCardID);
-        taskStorageArray[taskIndex].subTaskArray[subTaskIndex][`${x.getAttribute('class')}`] = x.innerHTML;
-    }
-    pubsub.subscribe('newEdit',editSubTaskText);
-
-    //x is the input element
-    const editSubTaskPriority=(x)=>{
-        const subTaskIndex = x.parentNode.parentNode.parentNode.parentNode.getAttribute('data-index');
-        const taskIndex = taskStorageArray.findIndex(e => e.taskID == currentTaskCardID);
-        if(x.checked){
-            taskStorageArray[taskIndex].subTaskArray[subTaskIndex].priority = x.value;
-            console.log(taskStorageArray[taskIndex].subTaskArray[subTaskIndex].priority);
-        };
-    };
-    pubsub.subscribe('subPriorityChange',editSubTaskPriority)
 
     //x is the subtask index
     const deleteSubTask=(x)=>{
         //current
-        const taskIndex = taskStorageArray.findIndex(e => e.taskID == currentTaskCardID);
+        const taskIndex = taskStorageArray.indexOf(currentTask);
         taskStorageArray[taskIndex].subTaskArray.splice(x,1);
-        console.log(taskStorageArray[taskIndex].subTaskArray);
-        console.log(x);
-        pubsub.publish('subTaskDeleted',taskStorageArray[taskIndex].subTaskArray)
+        pubsub.publish('subTaskDeleted',taskStorageArray[taskIndex].subTaskArray);
     };
     pubsub.subscribe('deleteSubTask',deleteSubTask);
 })();

@@ -80,34 +80,25 @@ body{
     grid-column: 2/4;
     /* border-radius: 10px; */
 }
-#card{
+.card{
     /* height: 100%; */
     width: 100%;
     padding: 10px;
     display: flex;
     flex-direction: column;
     gap: 10px;
+    border: 1px solid black;
 }
-#newSubTaskButton{
-    height: 20px;
-    width: 40px;
-}
-#cardHeader{
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    background-color: white;
-    border: 2px solid black;
-    /* border-radius: 10px; */
-}
-#cardHeaderCont1{
+/* #newSubTaskButton{
+
+} */
+.cardCont1{
     display: flex;
     justify-content: space-between;
     align-items: center;
     border: 1px solid black;
 }
-#priorityCont{
+.priorityCont{
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -118,7 +109,7 @@ body{
 /* #priorityForm label{
     color: black;
 } */
-#priorityForm{
+.priorityForm{
     display: flex;
     align-items: center;
     gap: 3px;
@@ -139,28 +130,28 @@ input[type='radio']:hover{
     background-color: rgb(255, 40, 40);
     opacity: 40%;
 } */
-#criticalInput:checked,.criticalInput:checked{
+.criticalInput:checked{
     background-color: red;
 }
 /* #importantInput{
     background-color: rgb(255, 177, 33);
     opacity: 40%;
 } */
-#importantInput:checked,.importantInput:checked{
+.importantInput:checked{
     background-color: orangered;
 }
 /* #normalInput{
     background-color: rgb(238, 238, 35);
     opacity: 40%;
 } */
-#normalInput:checked,.normalInput:checked{
+.normalInput:checked{
     background-color: yellow;
 }
 /* #finishedInput{
     background-color: rgb(61, 219, 61);
     opacity: 40%;
 } */
-#finishedInput:checked,.finishedInput:checked{
+.finishedInput:checked{
     background-color: greenyellow;
 }
 /* input[type='radio']:checked{
@@ -179,18 +170,9 @@ input[type='radio']:hover{
     cursor:pointer;
     background-color: rgb(189, 189, 189);
 }
-#cardHeaderCont2{
+.cardCont2{
     border: 1px solid black;
 }
-#cardHeaderCont3{
+.cardCont3{
     border: 1px solid black;
-}
-#subTasks{
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-#subTasks .subTask{
-    background-color: white;
-    border: 2px solid black;
 }
