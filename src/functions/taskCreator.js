@@ -7,7 +7,7 @@ const taskObjModule = (()=>{
         const taskMaker =()=>{
             const title = 'Untitled';
             const priority = '';
-            const dueDate = 'TEST DUE DATE';
+            const dueDate = '';
             const description = 'TEST DESCRIPTION';
             const subTaskArray = [];
             const isTask = true;

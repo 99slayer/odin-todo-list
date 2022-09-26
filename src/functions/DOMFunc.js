@@ -149,11 +149,12 @@ export const DOMMod = (()=>{
             });
 
             //we're gonna try something with an outside library here later.
-            const dueDate = document.createElement('p');
+            const dueDate = document.createElement('input');
             // dueDate.classList.add('editable');
-            dueDate.textContent = `${x.dueDate}`;
+            // dueDate.textContent = `${x.dueDate}`;
+            dueDate.setAttribute('type','date');
             dueDate.setAttribute(`data-${taskType}-ID`,`${ID}`);
-            dueDate.addEventListener('click',editFunc.editText);
+            // dueDate.addEventListener('click',editFunc.editText);
         
             const description = document.createElement('p');
             // description.classList.add('editable');
