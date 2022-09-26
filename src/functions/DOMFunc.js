@@ -15,7 +15,6 @@ export const DOMMod = (()=>{
             input.type = 'text';
             textElement.parentNode.insertBefore(input,textElement);
             input.focus();
-
             //for enter key
             input.onkeydown = (ev) =>{
                 if(ev.key == 'Enter'){
@@ -41,9 +40,6 @@ export const DOMMod = (()=>{
     const cardCreation = (() =>{
         //x is the taskObj
         const generateCard = (x) =>{
-            // if(x === undefined){
-            //     return;
-            // };
             let ID = '';
             let taskType = '';
             const card = document.createElement('div');
@@ -74,6 +70,7 @@ export const DOMMod = (()=>{
 
             const priorityCont = document.createElement('div');
             const priorityText = document.createElement('h5');
+            priorityText.textContent = 'SET TASK PRIORITY';
             const generatePriorityText=()=>{
                 priorityText.textContent = `${x.priority.toUpperCase()}`;
                 priorityCont.style.gap = '10px';
@@ -156,7 +153,6 @@ export const DOMMod = (()=>{
             dueDate.setAttribute(`data-${taskType}-ID`,`${ID}`);
             dueDate.addEventListener('click',editFunc.editText);
         
-            //setting 'contenteditable' attribute to true seems to yeild better results for description?
             const description = document.createElement('p');
             description.textContent = `${x.description}`;
             description.setAttribute(`data-${taskType}-ID`,`${ID}`);
@@ -187,12 +183,11 @@ export const DOMMod = (()=>{
             };
             const elementNameArray = Object.keys(elementObj);
         
-            // for(let i=elementNameArray.length-1;i>=0;--i){
-            //     elementObj[elementNameArray[i]].setAttribute('id',`${elementNameArray[i]}`);
-            // };
+            //Adds a class to every array element equal to their variable name
             for(let i=elementNameArray.length-1;i>=0;--i){
                 elementObj[elementNameArray[i]].classList.add(`${elementNameArray[i]}`);
             };
+
             main.append(card);
             card.append(deleteButtonCont,cardCont1,cardCont2,cardCont3);
             deleteButtonCont.append(deleteButton);
@@ -212,9 +207,6 @@ export const DOMMod = (()=>{
                     pubsub.publish('createNewSubTask',true);
                 };
                 main.appendChild(newSubTaskButton);
-            };
-            if(x.isTask){
-                pubsub.publish('cardGenerated',x);
             };
         };
         return{generateCard};
@@ -246,11 +238,9 @@ export const DOMMod = (()=>{
     
     //function to generate sidebar tabs whenever a new taskObj is stored.(or changed).
     const taskTabCreation = (() =>{
-        //x is the task storage array
-        const generateTaskTabs = function(x){
-            //x is the task storage array
+        const generateTaskTabs = function(taskArray){
             taskTabs.replaceChildren();
-            x.forEach((e)=>{
+            taskArray.forEach((e)=>{
                 //e is a task object
                 const tab = document.createElement('div')
                 tab.classList.add('tab')
@@ -308,6 +298,5 @@ export const DOMMod = (()=>{
         newTaskButton.onclick =()=>{
             pubsub.publish('newTask',true);
         };
-        // pubsub.subscribe('taskObjCreated',cardCreation.generateCard);
     })();
 })();

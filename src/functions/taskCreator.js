@@ -1,9 +1,8 @@
 import { pubsub } from "./pubsub";
-
+//possible functions: findTaskIndex,findSubTaskIndex,generateTaskID,...
 const taskObjModule = (()=>{
     const taskStorageArray = [];
     let currentTask = '';
-
     const createTaskObj =(x)=>{
         const taskMaker =()=>{
             const title = 'Untitled';
@@ -36,9 +35,7 @@ const taskObjModule = (()=>{
         };
         if(x){
             storeTask(taskMaker());
-            //publishes new taskObj
 			setCurrentTask(taskStorageArray[taskStorageArray.length-1]);
-            // pubsub.publish('taskObjCreated',taskStorageArray[taskStorageArray.length-1]);
         };
     };
     pubsub.subscribe('newTask',createTaskObj);
@@ -47,13 +44,13 @@ const taskObjModule = (()=>{
         currentTask = x;
 		pubsub.publish('newCurrentTask',x);
     };
-    // pubsub.subscribe('cardGenerated',setCurrentTask);
 	pubsub.subscribe('tabSelected',setCurrentTask);
 
     const storeTask=(x)=>{
         taskStorageArray.push(x);
         pubsub.publish('taskStorageChange',taskStorageArray);
     };
+
     const deleteTask=(deleteButton)=>{
         let taskIndex = taskStorageArray.indexOf(currentTask);
         if(deleteButton.getAttribute('data-task-ID')){
@@ -106,64 +103,47 @@ const taskObjModule = (()=>{
             const subTaskIndex = currentTask.subTaskArray.indexOf(subTask);
             taskStorageArray[taskIndex].subTaskArray[subTaskIndex].priority = priorityElement.value;
         };
-        // if(priorityElement.checked){
-        //     taskStorageArray[taskIndex].priority = priorityElement.value;
-        // };
         pubsub.publish('tabElementChange',taskStorageArray);
     };
     pubsub.subscribe('priorityChange',editTaskPriority)
 
+    const subTaskMaker=(x)=>{
+        const createSubTask=()=>{
+            const title = 'Untitled';
+            const priority = '';
+            const dueDate = 'TEST DUEDATE';
+            const description = 'TEST DESCRIPTION';
+            const isTask = false;
+            const generateTaskID =()=>{
+                let ID = Math.floor(Math.random()*10000);
+                const TaskIDArray = currentTask.subTaskArray.map(x => x.subTaskID);
+                if(TaskIDArray.find(x => x == ID)){
+                    console.log('WARNING duplicate ID found');
+                    do{
+                        ID = Math.floor(Math.random()*10000);
+                        console.log(`this objects new ID is ${ID}`);
+                    }
+                    while(TaskIDArray.find(x => x == ID));
+                }
+                else{
+                    console.log('no duplicate ID found');
+                };
+                return ID;
+            }
+            const subTaskID = generateTaskID();
 
-
-
-	const subTaskObjModule = (()=>{
-		const subTaskMaker=(x)=>{
-			const createSubTask=()=>{
-				const title = 'Untitled';
-				const priority = '';
-				const dueDate = 'TEST DUEDATE';
-				const description = 'TEST DESCRIPTION';
-                const isTask = false;
-				const generateTaskID =()=>{
-					let ID = Math.floor(Math.random()*10000);
-					const TaskIDArray = currentTask.subTaskArray.map(x => x.subTaskID);
-					if(TaskIDArray.find(x => x == ID)){
-						console.log('WARNING duplicate ID found');
-						do{
-							ID = Math.floor(Math.random()*10000);
-							console.log(`this objects new ID is ${ID}`);
-						}
-						while(TaskIDArray.find(x => x == ID));
-					}
-					else{
-						console.log('no duplicate ID found');
-					};
-					return ID;
-				}
-				const subTaskID = generateTaskID();
-	
-				return {title,priority,dueDate,description,isTask,subTaskID};
-			};
-			if(x){
-				storeSubTask(createSubTask());
-				pubsub.publish('newSubTask',currentTask);
-			};
-		};
-		pubsub.subscribe('createNewSubTask',subTaskMaker);
-	})();
-    //x is the newly created subtask object
-    const storeSubTask=(x)=>{
-		currentTask.subTaskArray.push(x);
+            return {title,priority,dueDate,description,isTask,subTaskID};
+        };
+        if(x){
+            storeSubTask(createSubTask());
+            pubsub.publish('newSubTask',currentTask);
+        };
     };
+    pubsub.subscribe('createNewSubTask',subTaskMaker);
 
-    //x is the subtask index
-    const deleteSubTask=(x)=>{
-        //current
-        const taskIndex = taskStorageArray.indexOf(currentTask);
-        taskStorageArray[taskIndex].subTaskArray.splice(x,1);
-        pubsub.publish('subTaskDeleted',taskStorageArray[taskIndex].subTaskArray);
+    const storeSubTask=(subtask)=>{
+		currentTask.subTaskArray.push(subtask);
     };
-    pubsub.subscribe('deleteSubTask',deleteSubTask);
 })();
 
 export{taskObjModule};
