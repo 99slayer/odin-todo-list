@@ -19,7 +19,7 @@ const taskObjModule = (()=>{
                 if(TaskIDArray.find(x => x == ID)){
                     console.log('WARNING duplicate ID found');
                     do{
-                        ID = 1 + Math.floor(Math.random()*10000);
+                        ID = Math.floor(Math.random()*10000);
                         console.log(`this objects new ID is ${ID}`);
                     }
                     while(TaskIDArray.find(x => x == ID));

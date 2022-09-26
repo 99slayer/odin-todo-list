@@ -5,9 +5,12 @@
 }
 body{
     font-family: 'Roboto Flex', sans-serif;
-    --background-color:rgb(109, 109, 109);
-    --main-color:rgb(201, 201, 201);
-    /* --trim-color:; */
+    color: white;
+    --background-color:rgb(133, 133, 133);
+    --main-color:rgb(109, 109, 109);
+    --container-color:rgb(77, 77, 77);
+    --trim-color:rgb(56, 56, 56);
+    --container-radius: 6px;
     height: 100vh;
     background-color: var(--background-color);
 }
@@ -18,13 +21,14 @@ body{
     grid-template-columns: 260px 1fr 1fr;
     gap: 10px;
 }
+/* SIDEBAR */
 #sidebar{
     display: flex;
     flex-direction: column;
     gap: 10px;
     padding: 10px;
-    background-color: var(--main-color);
-    /* border-radius: 10%; */
+    background-color: var(--container-color);
+    border-radius: var(--container-radius);
 }
 #sidebarHeader{
     display: flex;
@@ -41,7 +45,7 @@ body{
 #taskTabs{
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 10px;
 }
 #taskTabs .tab{
     padding: 8px;
@@ -50,12 +54,13 @@ body{
     justify-content: space-between;
     align-items: stretch;
     gap: 4px;
-    background-color: white;
-    /* border: 1px solid black; */
-    outline: 2px solid black;
+    background-color: var(--main-color);
+    border-radius: var(--container-radius);
+    /* outline: 2px solid black; */
 }
 #taskTabs .tab:hover{
     cursor: pointer;
+    outline: 3px solid var(--trim-color);
 }
 .tab .tabCont1{
     display: flex;
@@ -65,29 +70,52 @@ body{
     width: 26px;
     height: 26px;
     border-radius: 100%;
-    border: 4px solid var(--background-color);
-    /* outline: 2px solid var(--background-color); */
-    /* background-color: red; */
+    border: 4px solid var(--trim-color);
 }
-/* .tab .tabCont2{
 
-} */
-/* #taskTabs .tab .tabHeading{
-
-} */
+/* MAIN */
 #main{
-    background-color: var(--main-color);
-    grid-column: 2/4;
-    /* border-radius: 10px; */
-}
-.card{
-    /* height: 100%; */
-    width: 100%;
-    padding: 10px;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    border: 1px solid black;
+    padding: 10px;
+    background-color: var(--container-color);
+    grid-column: 2/4;
+    border-radius: var(--container-radius);
+}
+.textEdit{
+    /* flex: 1; */
+    color: white;
+    background-color: var(--container-color);
+    outline: none;
+    border: none;
+}
+.card{
+    width: 100%;
+    padding: 10px;
+    display: grid;
+    grid-template-columns: 1fr 20px;
+    gap: 10px;
+    border-radius: var(--container-radius);
+    background-color: var(--main-color);
+}
+.card .deleteButtonCont{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    grid-column: 2/3;
+    grid-row: 1/last-line;
+}
+.deleteButtonCont .deleteButton{
+    height: 20px;
+    width: 24px;
+    background-color: rgb(190, 51, 51);
+    border: none;
+    border-radius: 2px;
+}
+.deleteButtonCont .deleteButton:hover{
+    cursor: pointer;
+    background-color: rgb(253, 41, 41);
 }
 /* #newSubTaskButton{
 
@@ -96,15 +124,16 @@ body{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border: 1px solid black;
+    /* border: 1px solid black; */
 }
 .priorityCont{
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 10px;
     padding: 4px 10px 4px 10px;
     border-radius: 20px;
-    background-color: var(--background-color);
+    background-color: var(--trim-color);
 }
 /* #priorityForm label{
     color: black;
@@ -154,25 +183,19 @@ input[type='radio']:hover{
 .finishedInput:checked{
     background-color: greenyellow;
 }
-/* input[type='radio']:checked{
-    background-color: gray;
-} */
-/* #cardHeaderCont2{
-
-} */
-/* .title:active{
-    color: red;
-} */
-/* .editable{
-    background-color:gray;
-} */
-.editable:hover{
+.cardCont2{
+    grid-column: 1/3;
+    /* border: 1px solid black; */
+}
+.cardCont3{
+    grid-column: 1/3;
+    /* border: 1px solid black; */
+}
+.title:hover,.dueDate:hover,.description:hover{
     cursor:pointer;
     background-color: rgb(189, 189, 189);
 }
-.cardCont2{
-    border: 1px solid black;
-}
-.cardCont3{
-    border: 1px solid black;
-}
+/* .editable:hover{
+    cursor:pointer;
+    background-color: rgb(189, 189, 189);
+} */

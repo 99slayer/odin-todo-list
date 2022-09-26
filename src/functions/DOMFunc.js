@@ -64,6 +64,7 @@ export const DOMMod = (()=>{
             };
 
             const title = document.createElement('h2');
+            // title.classList.add('editable');
             title.textContent = `${x.title}`;
             title.setAttribute(`data-${taskType}-ID`,`${ID}`);
             title.addEventListener('click',editFunc.editText);
@@ -149,11 +150,13 @@ export const DOMMod = (()=>{
 
             //we're gonna try something with an outside library here later.
             const dueDate = document.createElement('p');
+            // dueDate.classList.add('editable');
             dueDate.textContent = `${x.dueDate}`;
             dueDate.setAttribute(`data-${taskType}-ID`,`${ID}`);
             dueDate.addEventListener('click',editFunc.editText);
         
             const description = document.createElement('p');
+            // description.classList.add('editable');
             description.textContent = `${x.description}`;
             description.setAttribute(`data-${taskType}-ID`,`${ID}`);
             description.addEventListener('click',editFunc.editText);
