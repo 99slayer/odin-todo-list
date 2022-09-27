@@ -1,45 +1,59 @@
 import { pubsub } from "./pubsub";
 
-export const DOMMod = (()=>{
+export const DOMMod=(()=>{
     const taskTabs = document.getElementById('taskTabs');
     const newTaskButton = document.querySelector('.newTaskButton');
     const main = document.getElementById('main');
 
-    const editFunc = (()=>{
-        const editText =(event)=>{    
-            const textElement = event.target;
+    const editFuncMod=(()=>{
+        const taskEdit=(event)=>{
+            let editType = '';
+            const displayElement = event.target;
             const input = document.createElement('input');
-            textElement.style.display = 'none';
-            input.classList.add('textEdit');
-            input.value = textElement.innerHTML;
-            input.type = 'text';
-            textElement.parentNode.insertBefore(input,textElement);
+            console.log(displayElement.classList);
+            if(displayElement.classList == 'title'||'description'){
+                editType = 'text';
+            };
+            if(displayElement.classList == 'dueDate'){
+                editType = 'date';
+            };
+            //min date should be current day
+            //when clicking off calender the element disappears
+            //also if a text input is empty the display element disappears
+            displayElement.style.display = 'none';
+            input.classList.add(`${editType}Edit`);
+            input.value = displayElement.innerHTML;
+            input.type = `${editType}`;
+            displayElement.parentNode.insertBefore(input,displayElement);
             input.focus();
             //for enter key
-            input.onkeydown = (ev) =>{
-                if(ev.key == 'Enter'){
+            input.onkeydown=(keyboardEvent)=>{
+                if(keyboardEvent.key == 'Enter'){
                     finishEdit()
                 }
                 return;
             }
             //for clicking off input
-            input.onblur = () =>{
+            input.onblur=()=>{
                 finishEdit();
             };
             const finishEdit = function(){
-                textElement.innerHTML = input.value;
+                let displayValue = input.value;
+                if(input.value == ''){
+                    displayValue = `${displayElement.classList}`;
+                };
+                displayElement.innerHTML = displayValue;
                 input.parentNode.removeChild(input);
-                textElement.style.display = '';
-            
-                pubsub.publish('newEdit',textElement)
+                displayElement.style.display = '';
+                pubsub.publish('newEdit',displayElement)
             };
         };
-        return {editText};
+        return {taskEdit};
     })();
 
-    const cardCreation = (() =>{
+    const cardCreation=(()=>{
         //x is the taskObj
-        const generateCard = (x) =>{
+        const generateCard=(x)=>{
             let ID = '';
             let taskType = '';
             const card = document.createElement('div');
@@ -67,7 +81,7 @@ export const DOMMod = (()=>{
             // title.classList.add('editable');
             title.textContent = `${x.title}`;
             title.setAttribute(`data-${taskType}-ID`,`${ID}`);
-            title.addEventListener('click',editFunc.editText);
+            title.addEventListener('click',editFuncMod.taskEdit);
 
             const priorityCont = document.createElement('div');
             const priorityText = document.createElement('h5');
@@ -148,19 +162,17 @@ export const DOMMod = (()=>{
                 generatePriorityText();
             });
 
-            //we're gonna try something with an outside library here later.
-            const dueDate = document.createElement('input');
+            const dueDate = document.createElement('p');
             // dueDate.classList.add('editable');
-            // dueDate.textContent = `${x.dueDate}`;
-            dueDate.setAttribute('type','date');
+            dueDate.textContent = `${x.dueDate}`;
             dueDate.setAttribute(`data-${taskType}-ID`,`${ID}`);
-            // dueDate.addEventListener('click',editFunc.editText);
+            dueDate.addEventListener('click',editFuncMod.taskEdit);
         
             const description = document.createElement('p');
             // description.classList.add('editable');
             description.textContent = `${x.description}`;
             description.setAttribute(`data-${taskType}-ID`,`${ID}`);
-            description.addEventListener('click',editFunc.editText);
+            description.addEventListener('click',editFuncMod.taskEdit);
 
             // seperate all creation into one module then return an object with all created elements and run in through the class adding function?
             const elementObj = {

@@ -7,7 +7,7 @@ const taskObjModule = (()=>{
         const taskMaker =()=>{
             const title = 'Untitled';
             const priority = '';
-            const dueDate = '';
+            const dueDate = 'dueDate';
             const description = 'TEST DESCRIPTION';
             const subTaskArray = [];
             const isTask = true;
@@ -15,14 +15,14 @@ const taskObjModule = (()=>{
             //check for duplicate id's in task storage array
             const generateTaskID =()=>{
                 let ID = Math.floor(Math.random()*10000);
-                const TaskIDArray = taskStorageArray.map(x => x.taskID);
-                if(TaskIDArray.find(x => x == ID)){
+                const taskIDArray = taskStorageArray.map(x => x.taskID);
+                if(taskIDArray.find(x => x == ID)){
                     console.log('WARNING duplicate ID found');
                     do{
                         ID = Math.floor(Math.random()*10000);
                         console.log(`this objects new ID is ${ID}`);
                     }
-                    while(TaskIDArray.find(x => x == ID));
+                    while(taskIDArray.find(x => x == ID));
                 }
                 else{
                     console.log('no duplicate ID found');
@@ -74,18 +74,18 @@ const taskObjModule = (()=>{
     };
     pubsub.subscribe('deleteTask',deleteTask);
 
-    const editTaskText=(textElement)=>{
+    const editTaskText=(displayElement)=>{
         const taskIndex = taskStorageArray.indexOf(currentTask);
-        if(textElement.getAttribute('data-task-ID')){
+        if(displayElement.getAttribute('data-task-ID')){
             console.log('MAIN TASK EDIT.');
-            taskStorageArray[taskIndex][`${textElement.getAttribute('class')}`] = textElement.innerHTML;
+            taskStorageArray[taskIndex][`${displayElement.getAttribute('class')}`] = displayElement.innerHTML;
         };
-        if(textElement.getAttribute('data-subtask-ID')){
+        if(displayElement.getAttribute('data-subtask-ID')){
             console.log('SUBTASK EDIT.');
-            const elementID = textElement.getAttribute('data-subtask-ID');
+            const elementID = displayElement.getAttribute('data-subtask-ID');
             const subTask = currentTask.subTaskArray.find(e => e.subTaskID == elementID);
             const subTaskIndex = currentTask.subTaskArray.indexOf(subTask);
-            taskStorageArray[taskIndex].subTaskArray[subTaskIndex][`${textElement.getAttribute('class')}`] = textElement.innerHTML;
+            taskStorageArray[taskIndex].subTaskArray[subTaskIndex][`${displayElement.getAttribute('class')}`] = displayElement.innerHTML;
         };
         pubsub.publish('taskEdit',currentTask);
         pubsub.publish('tabElementChange',taskStorageArray);
@@ -116,14 +116,14 @@ const taskObjModule = (()=>{
             const isTask = false;
             const generateTaskID =()=>{
                 let ID = Math.floor(Math.random()*10000);
-                const TaskIDArray = currentTask.subTaskArray.map(x => x.subTaskID);
-                if(TaskIDArray.find(x => x == ID)){
+                const taskIDArray = currentTask.subTaskArray.map(x => x.subTaskID);
+                if(taskIDArray.find(x => x == ID)){
                     console.log('WARNING duplicate ID found');
                     do{
                         ID = Math.floor(Math.random()*10000);
                         console.log(`this objects new ID is ${ID}`);
                     }
-                    while(TaskIDArray.find(x => x == ID));
+                    while(taskIDArray.find(x => x == ID));
                 }
                 else{
                     console.log('no duplicate ID found');
