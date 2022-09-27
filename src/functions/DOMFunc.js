@@ -1,4 +1,5 @@
 import { pubsub } from "./pubsub";
+import { format } from "date-fns";
 
 export const DOMMod=(()=>{
     const taskTabs = document.getElementById('taskTabs');
@@ -18,12 +19,13 @@ export const DOMMod=(()=>{
                 editType = 'date';
             };
             //min date should be current day
-            //when clicking off calender the element disappears
-            //also if a text input is empty the display element disappears
             displayElement.style.display = 'none';
             input.classList.add(`${editType}Edit`);
             input.value = displayElement.innerHTML;
             input.type = `${editType}`;
+            if(editType == 'date'){
+                input.min = getCurrentDate();
+            };
             displayElement.parentNode.insertBefore(input,displayElement);
             input.focus();
             //for enter key
@@ -38,6 +40,7 @@ export const DOMMod=(()=>{
                 finishEdit();
             };
             const finishEdit = function(){
+                getCurrentDate();
                 let displayValue = input.value;
                 if(input.value == ''){
                     displayValue = `${displayElement.classList}`;
@@ -47,6 +50,10 @@ export const DOMMod=(()=>{
                 displayElement.style.display = '';
                 pubsub.publish('newEdit',displayElement)
             };
+        };
+        const getCurrentDate=()=>{
+            const today = new Date();
+            return format(today,'yyyy-MM-dd');
         };
         return {taskEdit};
     })();
