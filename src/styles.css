@@ -117,9 +117,6 @@ body{
     cursor: pointer;
     background-color: rgb(253, 41, 41);
 }
-/* #newSubTaskButton{
-
-} */
 .cardCont1{
     display: flex;
     justify-content: space-between;
@@ -135,9 +132,6 @@ body{
     border-radius: 20px;
     background-color: var(--trim-color);
 }
-/* #priorityForm label{
-    color: black;
-} */
 .priorityForm{
     display: flex;
     align-items: center;
@@ -155,31 +149,15 @@ input[type='radio']:hover{
     /* border: 2px solid lightblue;
     outline: rgb(104, 104, 228) solid 2px; */
 }
-/* #criticalInput{
-    background-color: rgb(255, 40, 40);
-    opacity: 40%;
-} */
 .criticalInput:checked{
     background-color: red;
 }
-/* #importantInput{
-    background-color: rgb(255, 177, 33);
-    opacity: 40%;
-} */
 .importantInput:checked{
     background-color: orangered;
 }
-/* #normalInput{
-    background-color: rgb(238, 238, 35);
-    opacity: 40%;
-} */
 .normalInput:checked{
     background-color: yellow;
 }
-/* #finishedInput{
-    background-color: rgb(61, 219, 61);
-    opacity: 40%;
-} */
 .finishedInput:checked{
     background-color: greenyellow;
 }
@@ -195,7 +173,3 @@ input[type='radio']:hover{
     cursor:pointer;
     background-color: rgb(189, 189, 189);
 }
-/* .editable:hover{
-    cursor:pointer;
-    background-color: rgb(189, 189, 189);
-} */

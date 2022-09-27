@@ -4,6 +4,9 @@ import { format } from "date-fns";
 export const DOMMod=(()=>{
     const taskTabs = document.getElementById('taskTabs');
     const newTaskButton = document.querySelector('.newTaskButton');
+    newTaskButton.onclick =()=>{
+        pubsub.publish('newTask',true);
+    };
     const main = document.getElementById('main');
 
     const editFuncMod=(()=>{
@@ -18,7 +21,6 @@ export const DOMMod=(()=>{
             if(displayElement.classList == 'dueDate'){
                 editType = 'date';
             };
-            //min date should be current day
             displayElement.style.display = 'none';
             input.classList.add(`${editType}Edit`);
             input.value = displayElement.innerHTML;
@@ -28,14 +30,14 @@ export const DOMMod=(()=>{
             };
             displayElement.parentNode.insertBefore(input,displayElement);
             input.focus();
-            //for enter key
+            //finishes edit on enter press
             input.onkeydown=(keyboardEvent)=>{
                 if(keyboardEvent.key == 'Enter'){
                     finishEdit()
                 }
                 return;
-            }
-            //for clicking off input
+            };
+            //finishes edit if the input loses focus
             input.onblur=()=>{
                 finishEdit();
             };
@@ -121,7 +123,6 @@ export const DOMMod=(()=>{
             if(x.priority == 'critical'){
                 criticalInput.setAttribute('checked','true');
             };
-
             criticalInput.addEventListener('click',()=>{
                 pubsub.publish('priorityChange',criticalInput);
                 generatePriorityText();
@@ -135,7 +136,6 @@ export const DOMMod=(()=>{
             if(x.priority == 'important'){
                 importantInput.setAttribute('checked','true');
             };
-
             importantInput.addEventListener('click',()=>{
                 pubsub.publish('priorityChange',importantInput);
                 generatePriorityText();
@@ -149,7 +149,6 @@ export const DOMMod=(()=>{
             if(x.priority == 'normal'){
                 normalInput.setAttribute('checked','true');
             };
-
             normalInput.addEventListener('click',()=>{
                 pubsub.publish('priorityChange',normalInput);
                 generatePriorityText();
@@ -163,7 +162,6 @@ export const DOMMod=(()=>{
             if(x.priority == 'finished'){
                 finishedInput.setAttribute('checked','true');
             };
-
             finishedInput.addEventListener('click',()=>{
                 pubsub.publish('priorityChange',finishedInput);
                 generatePriorityText();
@@ -235,8 +233,8 @@ export const DOMMod=(()=>{
         return{generateCard};
     })();
 
+    //renders the current task and its subtasks
     const renderTaskMod=(()=>{
-        //renders the current task and its subtasks
         const renderTask=(currentTask)=>{
             const getRenderArray=(x)=>{
                 const renderArray = [x];
@@ -252,14 +250,13 @@ export const DOMMod=(()=>{
             console.log(renderArray);
             renderArray.forEach(e=>cardCreation.generateCard(e));
         };
-        //subscribe to taskChange? maybe combine some events
         pubsub.subscribe('newCurrentTask',renderTask);
         pubsub.subscribe('newSubTask',renderTask);
         pubsub.subscribe('subTaskDeleted',renderTask)
         return{renderTask};
     })();
     
-    //function to generate sidebar tabs whenever a new taskObj is stored.(or changed).
+    //function to generate sidebar tabs whenever a new taskObj is stored/deleted, or a relevant task element is changed.
     const taskTabCreation = (() =>{
         const generateTaskTabs = function(taskArray){
             taskTabs.replaceChildren();
@@ -315,11 +312,5 @@ export const DOMMod=(()=>{
         pubsub.subscribe('tabElementChange',generateTaskTabs);
         pubsub.subscribe('taskStorageChange',generateTaskTabs);
         return {generateTaskTabs};
-    })();
-
-    const newTaskMod =(()=>{
-        newTaskButton.onclick =()=>{
-            pubsub.publish('newTask',true);
-        };
     })();
 })();
