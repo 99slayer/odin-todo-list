@@ -11,21 +11,27 @@ export const DOMMod=(()=>{
 
     const editFuncMod=(()=>{
         const taskEdit=(event)=>{
-            let editType = '';
+            let inputType = '';
+            let input = '';
             const displayElement = event.target;
-            const input = document.createElement('input');
-            console.log(displayElement.classList);
-            if(displayElement.classList == 'title'||'description'){
-                editType = 'text';
+            if(displayElement.classList == 'title'||'date'){
+                input = document.createElement('input');
+                if(displayElement.classList == 'title'){
+                    inputType = 'text';
+                };
+                if(displayElement.classList == 'dueDate'){
+                    inputType = 'date';
+                };
+                input.type = `${inputType}`;
             };
-            if(displayElement.classList == 'dueDate'){
-                editType = 'date';
+            if(displayElement.classList == 'description'){
+                input = document.createElement('textarea');
+                inputType = 'textArea';
             };
             displayElement.style.display = 'none';
-            input.classList.add(`${editType}Edit`);
+            input.classList.add(`${inputType}Edit`);
             input.value = displayElement.innerHTML;
-            input.type = `${editType}`;
-            if(editType == 'date'){
+            if(inputType == 'date'){
                 input.min = getCurrentDate();
             };
             displayElement.parentNode.insertBefore(input,displayElement);
