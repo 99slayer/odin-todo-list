@@ -1,5 +1,5 @@
 import { pubsub } from "./pubsub";
-//possible functions: findTaskIndex,findSubTaskIndex,generateTaskID,...
+
 const taskObjModule = (()=>{
     const taskStorageArray = [];
     let currentTask = '';
