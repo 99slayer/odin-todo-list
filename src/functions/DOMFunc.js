@@ -3,7 +3,7 @@ import { format } from "date-fns";
 
 export const DOMMod=(()=>{
     const taskTabs = document.getElementById('taskTabs');
-    const newTaskButton = document.querySelector('.newTaskButton');
+    const newTaskButton = document.querySelector('#newTaskButton');
     newTaskButton.onclick =()=>{
         pubsub.publish('newTask',true);
     };

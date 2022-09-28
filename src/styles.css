@@ -6,11 +6,13 @@
 body{
     font-family: 'Roboto Flex', sans-serif;
     color: white;
-    --background-color:rgb(133, 133, 133);
+    letter-spacing: 0.03em;
+    --background-color:rgb(151, 151, 151);
     --main-color:rgb(109, 109, 109);
     --container-color:rgb(77, 77, 77);
     --trim-color:rgb(56, 56, 56);
     --container-radius: 6px;
+    --widget-box-shadow: 2px 2px 3px rgb(31, 29, 29);
     height: 100vh;
     background-color: var(--background-color);
 }
@@ -29,17 +31,30 @@ body{
     padding: 10px;
     background-color: var(--container-color);
     border-radius: var(--container-radius);
+    box-shadow: var(--widget-box-shadow);
 }
 #sidebarHeader{
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-#sidebarHeader .newTaskButton{
-    font-size: 2em;
+#siteHeader{
+    padding-bottom: 0;
+    letter-spacing: 3px;
+    font-weight: 900;
+    border-bottom: 4px solid white;
 }
-#sidebarHeader .newTaskButton:hover{
-    color: rgb(41, 172, 41);
+#newTaskButton{
+    padding: 5px 10px 4px 10px;
+    font-size: 0.85em;
+    line-height: 0.9;
+    font-weight: 900;
+    background-color: var(--trim-color);
+    border-radius: 6px;
+    box-shadow: var(--widget-box-shadow);
+}
+#newTaskButton:hover{
+    outline: 2px solid white;
     cursor: pointer;
 }
 #taskTabs{
@@ -56,11 +71,12 @@ body{
     gap: 4px;
     background-color: var(--main-color);
     border-radius: var(--container-radius);
+    box-shadow:var(--widget-box-shadow);
     /* outline: 2px solid black; */
 }
 #taskTabs .tab:hover{
     cursor: pointer;
-    outline: 3px solid var(--trim-color);
+    outline: 2px solid white;
 }
 .tab .tabCont1{
     display: flex;
@@ -82,6 +98,7 @@ body{
     background-color: var(--container-color);
     grid-column: 2/4;
     border-radius: var(--container-radius);
+    box-shadow: var(--widget-box-shadow);
 }
 /* .dateEdit{
 
@@ -94,6 +111,7 @@ body{
     gap: 10px;
     border-radius: var(--container-radius);
     background-color: var(--main-color);
+    box-shadow: var(--widget-box-shadow);
 }
 .card .deleteButtonCont{
     display: flex;
@@ -116,8 +134,24 @@ body{
 .cardCont1{
     display: flex;
     justify-content: space-between;
+    gap: 10px;
     align-items: center;
     /* border: 1px solid black; */
+}
+/* .title{
+
+} */
+/* for title input */
+.textEdit{
+    padding: 0 4px 0 4px;
+    flex: 1;
+    flex-wrap: wrap;
+    color: white;
+    font-size: 1.1em;
+    background-color: var(--main-color);
+    outline: 2px solid var(--trim-color);
+    border: none;
+    border-radius: 6px;
 }
 .priorityCont{
     display: flex;
@@ -161,6 +195,15 @@ input[type='radio']:hover{
     grid-column: 1/3;
     /* border: 1px solid black; */
 }
+/* for date input */
+.dateEdit{
+    padding: 0 4px 0 4px;
+    outline: 2px solid var(--trim-color);
+    border: none;
+    border-radius: 6px;
+    background-color: var(--main-color);
+    cursor: pointer;
+}
 .cardCont3{
     grid-column: 1/3;
     /* border: 1px solid black; */
@@ -170,21 +213,32 @@ input[type='radio']:hover{
     white-space: pre-wrap;
     word-break: break-word;
 }
-/* for title input */
-.textEdit{
-    flex: 1;
-    flex-wrap: wrap;
-    color: white;
-    font-size: 1.1em;
-    background-color: var(--container-color);
-    outline: none;
-    border: none;
-}
 /* for description input */
 .textAreaEdit{
+    padding: 4px;
     width: 100%;
+    resize: none;
+    color: white;
+    background-color: var(--main-color);
+    outline: 2px solid var(--trim-color);
+    border: none;
+    border-radius: 6px;
 }
 .title:hover,.dueDate:hover,.description:hover{
+    padding-left: 10px;
     cursor:pointer;
-    background-color: rgb(189, 189, 189);
+    border-left: 3px solid white;
+}
+.newSubTaskButton{
+    padding: 4px 0 4px 0;
+    color: white;
+    font-weight: 900;
+    background-color: var(--trim-color);
+    border: none;
+    border-radius: var(--container-radius);
+    box-shadow: var(--widget-box-shadow);
+}
+.newSubTaskButton:hover{
+    cursor: pointer;
+    outline: 2px solid white;
 }
