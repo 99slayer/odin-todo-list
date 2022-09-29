@@ -11,8 +11,8 @@ export const DOMMod=(()=>{
 
     const editFuncMod=(()=>{
         const taskEdit=(event)=>{
-            let inputType = '';
-            let input = '';
+            let inputType;
+            let input;
             const displayElement = event.target;
             if(displayElement.classList == 'title'||'date'){
                 input = document.createElement('input');
