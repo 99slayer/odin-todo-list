@@ -1,6 +1,6 @@
 import { pubsub } from "./pubsub";
 
-const taskObjModule = (()=>{
+export const taskObjModule = (()=>{
     const taskStorageArray = [];
     let currentTask = '';
     const createTaskObj =(x)=>{
@@ -40,6 +40,26 @@ const taskObjModule = (()=>{
     };
     pubsub.subscribe('newTask',createTaskObj);
 
+    const sendTaskStorageArray=(x)=>{
+        if(x){
+            pubsub.publish('arraySent',taskStorageArray);
+        };
+    };
+    pubsub.subscribe('DOMLoaded',sendTaskStorageArray);
+
+    const loadUserTasks=(x)=>{
+        //maybe loop and push?
+        console.log(x);
+        x.forEach((e)=>{
+            taskStorageArray.push(e);
+        });
+        pubsub.publish('userStorageLoaded',taskStorageArray);
+        pubsub.publish('loadFirstTask',taskStorageArray[0]);
+        setCurrentTask(taskStorageArray[0]);
+        console.log(`this is the task storage array ${taskStorageArray}`);
+    };
+    pubsub.subscribe('gettingUserStorage',loadUserTasks);
+
     const setCurrentTask=(x)=>{
         currentTask = x;
 		pubsub.publish('newCurrentTask',x);
@@ -69,6 +89,7 @@ const taskObjModule = (()=>{
             const subTaskIndex = currentTask.subTaskArray.indexOf(subTask);
             taskStorageArray[taskIndex].subTaskArray.splice(subTaskIndex,1);
             pubsub.publish('subTaskDeleted',currentTask);
+            pubsub.publish('subTaskArrayChange',taskStorageArray);
         };
 
     };
@@ -137,6 +158,7 @@ const taskObjModule = (()=>{
         if(x){
             storeSubTask(createSubTask());
             pubsub.publish('newSubTask',currentTask);
+            pubsub.publish('subTaskArrayChange',taskStorageArray);
         };
     };
     pubsub.subscribe('createNewSubTask',subTaskMaker);
@@ -145,5 +167,3 @@ const taskObjModule = (()=>{
 		currentTask.subTaskArray.push(subtask);
     };
 })();
-
-export{taskObjModule};

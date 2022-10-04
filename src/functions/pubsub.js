@@ -1,19 +1,3 @@
-// const grabForm = function(){
-//     const formGrab = {
-//         title:title.value,
-//         description:description.value,
-//         dueDate:dueDate.value,
-//         priority:priority.value,
-//     }
-//     console.log(formGrab);
-//     pubsub.publish('formGrab',formGrab);
-//     //clears old input
-//     const domArray = [title,description,dueDate,priority];
-//     domArray.forEach((e)=>{
-//         e.value = '';
-//     });
-// };
-
 const pubsub = {
     //events holds an array for each event
     events:{},

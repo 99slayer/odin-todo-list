@@ -1,7 +1,7 @@
 import { pubsub } from "./pubsub";
 import { format } from "date-fns";
 
-export const DOMMod=(()=>{
+export const DOMModule=(()=>{
     const taskTabs = document.getElementById('taskTabs');
     const newTaskButton = document.querySelector('#newTaskButton');
     newTaskButton.onclick =()=>{
@@ -258,7 +258,8 @@ export const DOMMod=(()=>{
         };
         pubsub.subscribe('newCurrentTask',renderTask);
         pubsub.subscribe('newSubTask',renderTask);
-        pubsub.subscribe('subTaskDeleted',renderTask)
+        pubsub.subscribe('subTaskDeleted',renderTask);
+        pubsub.subscribe('loadFirstTask',renderTask);
         return{renderTask};
     })();
     
@@ -317,6 +318,6 @@ export const DOMMod=(()=>{
         };
         pubsub.subscribe('tabElementChange',generateTaskTabs);
         pubsub.subscribe('taskStorageChange',generateTaskTabs);
-        return {generateTaskTabs};
+        pubsub.subscribe('userStorageLoaded',generateTaskTabs);
     })();
 })();
