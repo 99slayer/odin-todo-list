@@ -14,7 +14,6 @@ export const localStorageModule=(()=>{
             console.log('getting user storage.');
             getFromStorage();
         };
-        console.log(localStorage.getItem("taskStorageArray"));
     };
     pubsub.subscribe('arraySent',checkStorage);
 
@@ -27,7 +26,6 @@ export const localStorageModule=(()=>{
     const getFromStorage=()=>{
         const taskStorageArrayJSON = localStorage.getItem("taskStorageArray");
         const taskStorageArrayObject = JSON.parse(taskStorageArrayJSON);
-        console.log(taskStorageArrayObject);
         pubsub.publish('gettingUserStorage',taskStorageArrayObject);
     };
 
@@ -35,7 +33,6 @@ export const localStorageModule=(()=>{
      const saveToStorage=(taskStorageArray)=>{
         localStorage.setItem("taskStorageArray",JSON.stringify(taskStorageArray));
         console.log('local storage has been updated');
-        console.log(localStorage.getItem("taskStorageArray"));
     };
     pubsub.subscribe('taskStorageChange',saveToStorage);
     pubsub.subscribe('subTaskArrayChange',saveToStorage);
